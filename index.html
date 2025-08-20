@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Approved Books Leaderboard</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #f9f9f9;
+  }
+
+  .reader-container {
+    margin-bottom: 30px;
+  }
+
+  .reader-name {
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+
+  .book-gallery {
+    display: flex;
+    overflow-x: auto;
+    gap: 15px;
+    padding-bottom: 5px;
+  }
+
+  .book-gallery::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  .book-gallery::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+  }
+
+  .entry {
+    min-width: 120px;
+    text-align: center;
+    background-color: #fff;
+    padding: 8px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    flex-shrink: 0;
+  }
+
+  .entry img.cover {
+    width: 100px;
+    height: 150px;
+    object-fit: cover;
+    margin-bottom: 6px;
+    border-radius: 4px;
+  }
+
+  .entry strong {
+    display: block;
+    font-size: 14px;
+    line-height: 1.2;
+  }
+</style>
+</head>
+<body>
+
+<h2>Approved Books Leaderboard</h2>
+<div id="leaderboard"></div>
+
+<script>
+// Embedded JSON data
+const data = [
+  {
+    "Name": "Alice",
+    "Challenge": "Mystery May",
+    "BookTitle": "The Hound of the Baskervilles",
+    "Author": "Arthur Conan Doyle",
+    "Stars": 5,
+    "Review": "Great read!",
+    "PolarisLink": "",
+    "Approved": true,
+    "CoverURL": "https://covers.openlibrary.org/b/id/240727-S.jpg"
+  },
+  {
+    "Name": "Alice",
+    "Challenge": "Thriller Thursday",
+    "BookTitle": "Gone Girl",
+    "Author": "Gillian Flynn",
+    "Stars": 4,
+    "Review": "Couldn't put it down!",
+    "PolarisLink": "",
+    "Approved": true,
+    "CoverURL": "https://covers.openlibrary.org/b/id/240728-S.jpg"
+  },
+  {
+    "Name": "Bob",
+    "Challenge": "Sci-Fi September",
+    "BookTitle": "Dune",
+    "Author": "Frank Herbert",
+    "Stars": 5,
+    "Review": "Loved it!",
+    "PolarisLink": "",
+    "Approved": true,
+    "CoverURL": "https://covers.openlibrary.org/b/id/240729-S.jpg"
+  }
+];
+
+// Group books by reader
+const grouped = {};
+data.forEach(book => {
+  if (!book.Approved) return;
+  if (!grouped[book.Name]) grouped[book.Name] = [];
+  grouped[book.Name].push(book);
+});
+
+// Populate leaderboard
+const container = document.getElementById('leaderboard');
+
+for (const [reader, books] of Object.entries(grouped)) {
+  const readerDiv = document.createElement('div');
+  readerDiv.className = 'reader-container';
+
+  const nameDiv = document.createElement('div');
+  nameDiv.className = 'reader-name';
+  nameDiv.textContent = reader;
+  readerDiv.appendChild(nameDiv);
+
+  const galleryDiv = document.createElement('div');
+  galleryDiv.className = 'book-gallery';
+
+  books.forEach(book => {
+    const div = document.createElement('div');
+    div.className = 'entry';
+    const challenge = book.Challenge || "Completed Challenge";
+    const cover = book.CoverURL || 'https://via.placeholder.com/100x150?text=No+Cover';
+    div.innerHTML = `<strong>${challenge}</strong>
+                     <img class="cover" src="${cover}" alt="${challenge}">`;
+    galleryDiv.appendChild(div);
+  });
+
+  readerDiv.appendChild(galleryDiv);
+  container.appendChild(readerDiv);
+}
+</script>
+
+</body>
+</html>

@@ -1,9 +1,12 @@
-// data.js - Data management and API interactions
+// data.js - Updated with CSV URL configuration and testing
 
-// Configuration
+// Configuration - UPDATE THIS WITH YOUR PUBLISHED CSV URL
 export const CONFIG = {
-    SHEET_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRGYu9wBs7mJjvQhJt-MIcBejYVeXSSPbREaslRHty3WmXRepVk7i99OqmmmoWNjoQsmXbCIBiQnwiu/pub?output=csv', // Add your published CSV URL here
+    // TODO: Replace this with your actual published CSV URL from Google Sheets
+    // Example: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vXXXXX/pub?output=csv&gid=0'
+    SHEET_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRGYu9wBs7mJjvQhJt-MIcBejYVeXSSPbREaslRHty3WmXRepVk7i99OqmmmoWNjoQsmXbCIBiQnwiu/pub?gid=1299984813&single=true&output=csv', // <-- PUT YOUR CSV URL HERE
     POLL_INTERVAL: 60000, // 60 seconds
+    USE_CACHE_BUSTING: true, // Add random parameter to prevent caching
 };
 
 // Challenge mapping for converting numbers back to descriptions
@@ -20,77 +23,55 @@ export const challengeMap = {
     10: "Read a book with over 400 pages"
 };
 
-// Sample data for testing/fallback
+// Sample data for testing/fallback - EXPANDED for testing
 export const sampleData = [
     { 
         name: "Caleb R.", 
         booksRead: 7, 
         books: [
-            { title: "The Seven Husbands of Evelyn Hugo", olid: "OL58008787M", challenge: "Read a book recommended by a librarian" },
+            { title: "The Seven Husbands of Evelyn Hugo", olid: "OL58008787M", challenge: "Read a book recommended by a librarian", catalogURL: "http://catalog.westportlibrary.org/polaris/view.aspx?keyword=Seven%20Husbands%20Evelyn%20Hugo" },
             { title: "Klara and the Sun", olid: "OL59403559M", challenge: "Read a book with alliteration in the title" },
             { title: "The Midnight Library", olid: "OL59403559M", challenge: "Read a book about time travel" },
             { title: "Educated", olid: "OL58008787M", challenge: "Read a memoir" },
             { title: "Dune", olid: "OL57572489M", challenge: "Read a science fiction novel" },
-            { title: "Becoming", olid: "OL59403559M", challenge: "Read a biography" },
-            { title: "The Alchemist", olid: "OL57572489M", challenge: "Read a philosophical book" }
+            { title: "Becoming", olid: "OL59403559M", challenge: "Read a book with a one-word title" },
+            { title: "The Alchemist", olid: "OL57572489M", challenge: "Read a mystery or thriller" }
         ]
     },
     { 
         name: "Sarah M.", 
         booksRead: 6, 
         books: [
-            { title: "Where the Crawdads Sing", olid: "OL27958946M", challenge: "Read a book set in nature" },
+            { title: "Where the Crawdads Sing", olid: "OL27958946M", challenge: "Read a book published this year" },
             { title: "The Guest List", olid: "OL28088032M", challenge: "Read a mystery or thriller" },
-            { title: "Atomic Habits", olid: "OL26431704M", challenge: "Read a self-help book" },
-            { title: "The Silent Patient", olid: "OL27958952M", challenge: "Read a psychological thriller" },
-            { title: "Normal People", olid: "OL26431710M", challenge: "Read a coming of age story" },
-            { title: "The Vanishing Half", olid: "OL28088026M", challenge: "Read a book of historical fiction" }
+            { title: "Atomic Habits", olid: "OL26431704M", challenge: "Read a memoir" },
+            { title: "The Silent Patient", olid: "OL27958952M", challenge: "Read a graphic novel or comic" },
+            { title: "Normal People", olid: "OL26431710M", challenge: "Read a book with over 400 pages" },
+            { title: "The Vanishing Half", olid: "OL28088026M", challenge: "Read a book recommended by a librarian" }
         ]
     },
     { 
         name: "Emma K.", 
         booksRead: 3, 
         books: [
-            { title: "The Invisible Life of Addie LaRue", olid: "OL28315479M", challenge: "Read a book that is a fantasy novel" },
-            { title: "Circe", olid: "OL26430527M", challenge: "Read a book that is a mythological retelling" },
-            { title: "The Song of Achilles", olid: "OL25152344M", challenge: "Read a book that has LGBTQ+ themes" }
+            { title: "The Invisible Life of Addie LaRue", olid: "OL28315479M", challenge: "Read a book with alliteration in the title" },
+            { title: "Circe", olid: "OL26430527M", challenge: "Read a book about time travel" },
+            { title: "The Song of Achilles", olid: "OL25152344M", challenge: "Read a science fiction novel" }
         ]
     },
     { 
         name: "David L.", 
         booksRead: 2, 
         books: [
-            { title: "Project Hail Mary", olid: "OL32338681M", challenge: "Read a book that is Science fiction" },
-            { title: "The Thursday Murder Club", olid: "OL28088070M", challenge: "Read a book that is a cozy mystery" }
+            { title: "Project Hail Mary", olid: "OL32338681M", challenge: "Read a book with a one-word title" },
+            { title: "The Thursday Murder Club", olid: "OL28088070M", challenge: "Read a mystery or thriller" }
         ]
     },
     { 
         name: "Lisa P.", 
-        booksRead: 2, 
-        books: [
-            { title: "Beach Read", olid: "OL27958934M", challenge: "Read a book that is a Romance novel" },
-            { title: "The Dutch House", olid: "OL27312320M", challenge: "Read a book about a family saga" }
-        ]
-    },
-    { 
-        name: "Alex T.", 
         booksRead: 1, 
         books: [
-            { title: "The Silent Patient", olid: "OL27958952M", challenge: "Read a book that is psychologically thrilling" }
-        ]
-    },
-    { 
-        name: "Kate J.", 
-        booksRead: 1, 
-        books: [
-            { title: "Normal People", olid: "OL26431710M", challenge: "Read a book that is a coming of age story" }
-        ]
-    },
-    { 
-        name: "Robert S.", 
-        booksRead: 1, 
-        books: [
-            { title: "The Vanishing Half", olid: "OL28088026M", challenge: "Read a book that is historical fiction" }
+            { title: "Beach Read", olid: "OL27958934M", challenge: "Read a book published this year" }
         ]
     }
 ];
@@ -127,6 +108,14 @@ export let reviewsData = [];
 export function expandChallenge(challengeText) {
     if (!challengeText) return challengeText;
     
+    // If it's already a full challenge description, return as-is
+    if (challengeText.toLowerCase().startsWith('read a book') || 
+        challengeText.toLowerCase().startsWith('read a memoir') ||
+        challengeText.toLowerCase().startsWith('read a mystery') ||
+        challengeText.toLowerCase().startsWith('read a graphic')) {
+        return challengeText;
+    }
+    
     // Add back the "Read a book" or "Read a" prefix for full context
     let expanded = challengeText.toLowerCase();
     
@@ -161,14 +150,14 @@ export function parseCSVRow(row) {
         if (char === '"') {
             inQuotes = !inQuotes;
         } else if (char === ',' && !inQuotes) {
-            result.push(current.trim());
+            result.push(current.trim().replace(/^"|"$/g, '')); // Remove surrounding quotes
             current = '';
         } else {
             current += char;
         }
     }
     
-    result.push(current.trim());
+    result.push(current.trim().replace(/^"|"$/g, '')); // Remove surrounding quotes
     return result;
 }
 
@@ -206,64 +195,88 @@ export function extractISBNFromCoverURL(coverURL) {
  */
 export function parseCSVToLeaderboard(csvText) {
     const lines = csvText.trim().split('\n');
-    const headers = lines[0].split(',');
     
-    // Expected columns: Timestamp, Email, Name, Challenge, Title, Author, Stars, Review, CoverURL, CatalogURL, Status, Publish Flag
-    // Column indices: 0=Timestamp, 1=Email, 2=Name, 3=Challenge, 4=Title, 5=Author, 6=Stars, 7=Review, 8=CoverURL, 9=CatalogURL, 10=Status, 11=Publish Flag
+    if (lines.length < 2) {
+        console.warn('CSV has no data rows');
+        return { participants: [], reviews: [] };
+    }
+    
+    const headers = parseCSVRow(lines[0]);
+    console.log('CSV Headers:', headers);
+    
+    // Expected columns: Timestamp, Email, Name, Challenge, Title, Author, Stars, Review, CoverURL, CatalogURL, Status, Verification Status, Publish Flag
     const participants = {};
     const reviews = [];
     
     for (let i = 1; i < lines.length; i++) {
-        const row = parseCSVRow(lines[i]);
+        if (!lines[i].trim()) continue; // Skip empty lines
         
-        // Only process entries marked for publication (Column L - index 11)
-        const isPublished = row[11] && row[11].toString().toUpperCase() === 'TRUE';
-        if (!isPublished) continue; // Skip unpublished entries
-        
-        const email = row[1];
-        const name = row[2];
-        const challengeText = row[3]; // Truncated challenge text from sheet
-        const bookTitle = row[4];
-        const author = row[5];
-        const stars = parseInt(row[6]) || 0;
-        const review = row[7];
-        const coverURL = row[8];
-        const catalogURL = row[9]; // Column J
-        const status = row[10]; // Column K
-        
-        // Group by email (unique identifier)
-        if (!participants[email]) {
-            participants[email] = {
-                name: name,
-                booksRead: 0,
-                books: [],
-                status: status // Add status to participant
-            };
-        }
-        
-        // Add book to participant with updated structure
-        participants[email].booksRead++;
-        participants[email].books.push({
-            title: bookTitle,
-            olid: extractOLIDFromCoverURL(coverURL), // Extract OLID from cover URL if available
-            challenge: expandChallenge(challengeText), // Expand for display
-            coverURL: coverURL,
-            catalogURL: catalogURL && catalogURL.startsWith('http') ? catalogURL : null // Only use valid URLs
-        });
-        
-        // Add to reviews if 4+ stars and has review text
-        if (stars >= 4 && review && review.trim()) {
-            reviews.push({
+        try {
+            const row = parseCSVRow(lines[i]);
+            console.log(`Processing row ${i}:`, row);
+            
+            // Only process entries marked for publication (Column M - index 12)
+            const isPublished = row[12] && row[12].toString().toUpperCase() === 'TRUE';
+            if (!isPublished) {
+                console.log(`Skipping row ${i} - not published:`, row[12]);
+                continue;
+            }
+            
+            const email = row[1];
+            const name = row[2];
+            const challengeText = row[3]; // Truncated challenge text from sheet
+            const bookTitle = row[4];
+            const author = row[5];
+            const stars = parseInt(row[6]) || 0;
+            const review = row[7];
+            const coverURL = row[8];
+            const catalogURL = row[9]; // Column J
+            const status = row[10]; // Column K
+            
+            if (!email || !name || !bookTitle) {
+                console.log(`Skipping row ${i} - missing required fields`);
+                continue;
+            }
+            
+            // Group by email (unique identifier)
+            if (!participants[email]) {
+                participants[email] = {
+                    name: name,
+                    booksRead: 0,
+                    books: [],
+                    status: status // Add status to participant
+                };
+            }
+            
+            // Add book to participant with updated structure
+            participants[email].booksRead++;
+            participants[email].books.push({
                 title: bookTitle,
-                author: author,
-                isbn: extractISBNFromCoverURL(coverURL), // Extract ISBN if available
-                description: `${review.trim()} - ${stars} Stars from ${name}`
+                olid: extractOLIDFromCoverURL(coverURL), // Extract OLID from cover URL if available
+                challenge: expandChallenge(challengeText), // Expand for display
+                coverURL: coverURL && coverURL !== 'Not Found' ? coverURL : null,
+                catalogURL: catalogURL && catalogURL.startsWith('http') ? catalogURL : null // Only use valid URLs
             });
+            
+            // Add to reviews if 4+ stars and has review text
+            if (stars >= 4 && review && review.trim() && review !== 'No review provided') {
+                reviews.push({
+                    title: bookTitle,
+                    author: author,
+                    isbn: extractISBNFromCoverURL(coverURL), // Extract ISBN if available
+                    description: `${review.trim()} - ${stars} Stars from ${name}`
+                });
+            }
+            
+        } catch (error) {
+            console.error(`Error processing row ${i}:`, error);
         }
     }
     
     // Convert participants object to array
     const participantArray = Object.values(participants);
+    
+    console.log(`Parsed ${participantArray.length} participants and ${reviews.length} reviews`);
     
     return { participants: participantArray, reviews: reviews };
 }
@@ -272,18 +285,37 @@ export function parseCSVToLeaderboard(csvText) {
  * Function to fetch latest data from Google Sheets
  */
 export async function fetchLatestData() {
-    if (!CONFIG.SHEET_CSV_URL) {
+    if (!CONFIG.SHEET_CSV_URL || CONFIG.SHEET_CSV_URL.trim() === '') {
         console.log('Sheet CSV URL not configured, using sample data');
         return { participants: sampleData, reviews: sampleReviewsData };
     }
     
     try {
-        const response = await fetch(CONFIG.SHEET_CSV_URL);
+        // Add cache busting parameter to prevent browser caching
+        let fetchURL = CONFIG.SHEET_CSV_URL;
+        if (CONFIG.USE_CACHE_BUSTING) {
+            const cacheBuster = Date.now();
+            const separator = fetchURL.includes('?') ? '&' : '?';
+            fetchURL = `${fetchURL}${separator}_cb=${cacheBuster}`;
+        }
+        
+        console.log('Fetching data from:', fetchURL);
+        
+        const response = await fetch(fetchURL, {
+            cache: 'no-cache', // Don't use browser cache
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            }
+        });
+        
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         
         const csvText = await response.text();
+        console.log('Received CSV data:', csvText.substring(0, 200) + '...');
+        
         const newData = parseCSVToLeaderboard(csvText);
         
         // Update global data
@@ -316,12 +348,16 @@ export function startPolling(onUpdate) {
     // Initial fetch
     fetchLatestData().then(onUpdate);
     
-    if (CONFIG.SHEET_CSV_URL) {
+    if (CONFIG.SHEET_CSV_URL && CONFIG.SHEET_CSV_URL.trim() !== '') {
         // Set up interval (only when page is visible)
         setInterval(async () => {
             if (!document.hidden) {
-                const data = await fetchLatestData();
-                onUpdate(data);
+                try {
+                    const data = await fetchLatestData();
+                    onUpdate(data);
+                } catch (error) {
+                    console.error('Polling error:', error);
+                }
             }
         }, CONFIG.POLL_INTERVAL);
     }
@@ -341,3 +377,29 @@ export function setData(participants, reviews) {
 export function getData() {
     return { participants: allData, reviews: reviewsData };
 }
+
+// TEST FUNCTION - Call this from browser console to test CSV parsing
+window.testCSVConnection = async function() {
+    console.log('=== Testing CSV Connection ===');
+    console.log('CSV URL:', CONFIG.SHEET_CSV_URL);
+    
+    if (!CONFIG.SHEET_CSV_URL) {
+        console.error('❌ No CSV URL configured!');
+        console.log('👉 Set CONFIG.SHEET_CSV_URL in data.js');
+        return;
+    }
+    
+    try {
+        const data = await fetchLatestData();
+        console.log('✅ Successfully fetched data!');
+        console.log(`📊 Found ${data.participants.length} participants`);
+        console.log(`⭐ Found ${data.reviews.length} reviews`);
+        
+        if (data.participants.length > 0) {
+            console.log('📚 Sample participant:', data.participants[0]);
+        }
+    } catch (error) {
+        console.error('❌ Failed to fetch data:', error);
+        console.log('📝 Check your CSV URL and make sure the sheet is published');
+    }
+};

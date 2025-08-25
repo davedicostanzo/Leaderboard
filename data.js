@@ -285,7 +285,13 @@ export async function fetchLatestData() {
     
     try {
         console.log('Fetching data from:', CONFIG.SHEET_CSV_URL);
-        const response = await fetch(CONFIG.SHEET_CSV_URL + '&t=' + Date.now()); // Add timestamp to prevent caching
+        const response = await fetch(CONFIG.SHEET_CSV_URL, {
+    cache: 'no-cache',  // Prevent caching without URL modification
+    headers: {
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache'
+    }
+});
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);

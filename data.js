@@ -2,7 +2,7 @@
 
 // Configuration
 export const CONFIG = {
-    SHEET_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRGYu9wBs7mJjvQhJt-MIcBejYVeXSSPbREaslRHty3WmXRepVk7i99OqmmmoWNjoQsmXbCIBiQnwiu/pub?output=csv', // TODO: Add your published CSV URL here
+    SHEET_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRGYu9wBs7mJjvQhJt-MIcBejYVeXSSPbREaslRHty3WmXRepVk7i99OqmmmoWNjoQsmXbCIBiQnwiu/pub?gid=1299984813&single=true&output=csv', // TODO: Add your published CSV URL here
     POLL_INTERVAL: 60000, // 60 seconds
 };
 

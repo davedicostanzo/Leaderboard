@@ -79,13 +79,9 @@ function initializeApp() {
     // Expose global functions
     exposeGlobalFunctions();
     
-    // Start with sample data, then attempt to fetch real data
-    currentData = { participants: sampleData, reviews: [] };
-    setData(sampleData, []);
-    renderLeaderboard(sampleData, onLeaderboardRender);
-    
-    // Render reviews with sample data for now
-    renderReviews();
+    // Don't start with sample data - let fetchLatestData handle the fallback
+    // This prevents the "flash" of sample data
+    console.log('🚀 Initializing app...');
     
     // Setup lazy loading
     setupLazyLoading();
@@ -94,7 +90,7 @@ function initializeApp() {
     setupTouchNavigation();
     setupResizeHandler(onResize);
     
-    // Start polling for real data (will fall back to sample data if URL not configured)
+    // Start polling for real data (will handle sample data fallback internally)
     startPolling(onDataUpdate);
     
     // Add debugging for visibility with longer delay

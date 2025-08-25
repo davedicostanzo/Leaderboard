@@ -2,7 +2,7 @@
 
 // Configuration
 export const CONFIG = {
-    SHEET_CSV_URL: '', // TODO: Add your published CSV URL here
+    SHEET_CSV_URL: 'https://script.google.com/macros/s/AKfycbyUgvaPbcY-POoIamC7NL-rGAAUDYg94yJrsnFIe81M1KW864CY8oj3_l5DwhWo3P91WA/exec', // Add your published CSV URL here
     POLL_INTERVAL: 60000, // 60 seconds
 };
 

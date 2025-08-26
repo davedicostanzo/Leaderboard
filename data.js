@@ -287,8 +287,9 @@ export async function fetchLatestData() {
     }
     
     try {
-        console.log('Fetching data from:', CONFIG.SHEET_CSV_URL);
-        const response = await fetch(CONFIG.SHEET_CSV_URL, {
+        const hardcodedUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRGYu9wBs7mJjvQhJt-MIcBejYVeXSSPbREaslRHty3WmXRepVk7i99OqmmmoWNjoQsmXbCIBiQnwiu/pub?gid=1299984813&single=true&output=csv';
+console.log('Fetching data from hardcoded URL:', hardcodedUrl);
+        const response = await fetch(hardcodedUrl, {
     cache: 'no-cache',  // Prevent caching without URL modification
     headers: {
         'Cache-Control': 'no-cache',
@@ -412,4 +413,5 @@ function onUpdate(data) {
     // ... rest of your onUpdate code
 
 }
+
 

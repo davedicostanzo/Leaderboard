@@ -324,7 +324,7 @@ console.log('Response status:', response.status);
             reviewsData = newData.reviews;
             lastSuccessfulFetch = Date.now();
             
-            console.log('✓ Successfully updated:', allData.length, 'participants,', totalReviews, 'reviews');
+            console.log('✓ Successfully updated:', allData.length, 'participants,', reviewsData.length, 'reviews');
             console.log('Raw parsed data length:', newData.participants.length);
             console.log('Sample parsed row:', newData.participants[0]);
             console.log('Participants:', allData);
@@ -428,6 +428,7 @@ function onUpdate(data) {
     // ... rest of your onUpdate code
 
 }
+
 
 
 

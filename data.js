@@ -2,7 +2,7 @@
 
 // Configuration
 export const CONFIG = {
-    SHEET_CSV_URL: 'const hardcodedUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRGYu9wBs7mJjvQhJt-MIcBejYVeXSSPbREaslRHty3WmXRepVk7i99OqmmmoWNjoQsmXbCIBiQnwiu/export?format=csv&gid=1299984813', // TODO: Add your published CSV URL here
+    SHEET_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRGYu9wBs7mJjvQhJt-MIcBejYVeXSSPbREaslRHty3WmXRepVk7i99OqmmmoWNjoQsmXbCIBiQnwiu/pub?gid=1299984813&single=true&output=csv', // TODO: Add your published CSV URL here
     POLL_INTERVAL: 60000, // 60 seconds
 };
 
@@ -287,7 +287,7 @@ export async function fetchLatestData() {
     }
     
     try {
-        const hardcodedUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRGYu9wBs7mJjvQhJt-MIcBejYVeXSSPbREaslRHty3WmXRepVk7i99OqmmmoWNjoQsmXbCIBiQnwiu/pub?gid=1299984813&single=true&output=csv';
+        const hardcodedUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRGYu9wBs7mJjvQhJt-MIcBejYVeXSSPbREaslRHty3WmXRepVk7i99OqmmmoWNjoQsmXbCIBiQnwiu/export?format=csv&gid=1299984813';
 console.log('Fetching data from hardcoded URL:', hardcodedUrl);
         const response = await fetch(hardcodedUrl, {
     cache: 'no-cache',  // Prevent caching without URL modification
@@ -417,6 +417,7 @@ function onUpdate(data) {
     // ... rest of your onUpdate code
 
 }
+
 
 
 

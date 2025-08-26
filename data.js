@@ -287,7 +287,7 @@ export async function fetchLatestData() {
     }
     
     try {
-        const hardcodedUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRGYu9wBs7mJjvQhJt-MIcBejYVeXSSPbREaslRHty3WmXRepVk7i99OqmmmoWNjoQsmXbCIBiQnwiu/export?format=csv&gid=1299984813';
+        const hardcodedUrl = 'https://docs.google.com/spreadsheets/d/19lrKP2qffpZWjYkXfp4BVDs1wjkJc91OUD5Tw7acjI4/export?format=csv&gid=1299984813';
 console.log('Fetching data from hardcoded URL:', hardcodedUrl);
         const response = await fetch(hardcodedUrl, {
     cache: 'no-cache',  // Prevent caching without URL modification
@@ -417,6 +417,7 @@ function onUpdate(data) {
     // ... rest of your onUpdate code
 
 }
+
 
 
 

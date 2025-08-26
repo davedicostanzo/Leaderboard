@@ -91,6 +91,7 @@ function initializeApp() {
     setupResizeHandler(onResize);
     
     // Start polling for real data (will handle sample data fallback internally)
+    console.log('=== ABOUT TO START POLLING ===');
     startPolling(onDataUpdate);
     
     // Add debugging for visibility with longer delay
@@ -114,4 +115,5 @@ if (document.readyState === 'loading') {
 }
 
 // Export for potential external access
+
 export { initializeApp, onDataUpdate, currentData };

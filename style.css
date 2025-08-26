@@ -1,0 +1,874 @@
+/* Mobile-First Responsive CSS for Summer Reading Challenge Leaderboard */
+/* Updated with harmonized color scheme */
+
+/* Base Styles - Mobile First */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: white;
+    line-height: 1.6;
+}
+
+/* Skip link for accessibility */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: #000;
+    color: #fff;
+    padding: 8px;
+    text-decoration: none;
+    border-radius: 4px;
+    z-index: 1000;
+    transition: top 0.3s;
+}
+
+.skip-link:focus {
+    top: 6px;
+}
+
+/* Header Styling - matching library design */
+#s-lib-banner {
+    background-color: white;
+    padding: 10px 0;
+}
+
+.container {
+    max-width: 1170px;
+    margin: 0 auto;
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+
+.banner-img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Guide Header - Full width */
+#s-lg-guide-header {
+    background-color: white;
+    padding: 20px 0;
+    width: 100%;
+}
+
+#s-lg-guide-header .container {
+    max-width: 1170px;
+    margin: 0 auto;
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+
+.breadcrumb {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 15px 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.breadcrumb li {
+    margin-right: 10px;
+}
+
+.breadcrumb li:after {
+    content: " > ";
+    margin-left: 10px;
+    color: #666;
+}
+
+.breadcrumb li:last-child:after {
+    content: "";
+}
+
+.breadcrumb a {
+    color: #A63A5A;
+    text-decoration: none;
+}
+
+.breadcrumb a:hover,
+.breadcrumb a:focus {
+    text-decoration: underline;
+    outline: 2px solid #A63A5A;
+    outline-offset: 2px;
+}
+
+.breadcrumb .active {
+    color: #666;
+    font-weight: bold;
+}
+
+#s-lg-guide-name {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Challenge Banner */
+.challenge-banner {
+    background-color: white;
+    padding: 0;
+}
+
+.banner-image {
+    width: 100%;
+    height: auto;
+    max-height: 225px;
+    object-fit: cover;
+    display: block;
+}
+
+/* Navigation Menu - Desktop Default - KEEP EXISTING COLOR */
+.menu-bar {
+    background: #E62E3A;
+    
+    margin: 0 auto;
+    padding: 15px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.menu-bar a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 5px 0;
+    display: block;
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Mobile-specific menu styling */
+@media (max-width: 768px) {
+    .menu-bar {
+        padding: 10px 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .menu-bar a {
+        font-size: 16px;
+        font-weight: 600;
+        padding: 10px 12px;
+        border-radius: 6px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .menu-bar a:hover,
+    .menu-bar a:focus {
+        background-color: transparent;
+          text-decoration: underline; /* Add underline */
+    text-underline-offset: 4px; /* Space between text and underline */
+    text-decoration-thickness: 2px; /* Make underline slightly thicker */
+    outline: none; /* Remove default focus outline since we're using underline */
+
+        transform: none; /* Remove any transform effects */
+    }
+    
+    .menu-bar a[aria-current="page"] {
+        background-color: rgba(255, 255, 255, 0.15);
+      text-decoration: underline;
+        text-underline-offset: 3px;
+        font-weight: bold;
+    }
+}
+
+.menu-bar a:hover,
+.menu-bar a:focus {
+ background-color: transparent; /* Remove background effect */
+    text-decoration: underline; /* Add underline */
+    text-underline-offset: 4px; /* Space between text and underline */
+    text-decoration-thickness: 2px; /* Make underline slightly thicker */
+    outline: none; /* Remove default focus outline since we're using underline */
+    transform: none; /* Remove any transform effects */
+}
+
+/* Date Bar - Mobile specific padding - KEEP EXISTING COLOR */
+.date-bar {
+    background: #AB3485;
+    
+    margin: 0 auto;
+    padding: 10px 15px;
+    text-align: center;
+    color: white;
+    font-style: italic;
+    font-size: clamp(14px, 2vw, 18px);
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .date-bar {
+        padding: 12px 15px;
+    }
+}
+
+/* Main Content Area */
+.main-content {
+    margin-top: 20px;
+    background-color: white;
+    max-width: 1170px;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+}
+
+.main-content-inner {
+    padding: 0 15px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    box-sizing: border-box;
+}
+
+.main-column {
+    background-color: white;
+    width: 100%;
+    min-width: 0;
+}
+
+.sidebar-column {
+    width: 100%;
+    background-color: white;
+    min-width: 0;
+}
+
+/* Box Styling - matching s-lib-box - UPDATED COLOR */
+.s-lib-box {
+    width: 100%;
+    max-width: 100%;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #fff;
+    margin-bottom: 20px;
+    box-shadow: none;
+}
+
+.s-lib-box-title {
+    background-color: #8B4B6B; /* CHANGED from #728692 to harmonious purple-burgundy */
+    color: #ffffff;
+    padding: 10px 15px;
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 3px 3px 0px 0px;
+}
+
+.s-lib-box-content {
+    padding: 15px;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #64748b;
+}
+
+.spinner {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e2e8f0;
+    border-radius: 50%;
+    border-top-color: #A63A5A; /* CHANGED from #2F5EA2 to match warm palette */
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Stats Grid - Mobile First */
+.stats-hidden {
+    display: none;
+}
+
+.stats-visible {
+    display: grid !important;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+}
+
+.stats-visible.stats-loaded {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.stat-box {
+    background: white;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.stat-title {
+    background-color: #8B4B6B; /* CHANGED from #728692 to harmonious purple-burgundy */
+    color: white;
+    padding: 8px 12px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.stat-content {
+    padding: 15px;
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #A63A5A; /* CHANGED from #2F5EA2 to warm burgundy-red */
+    margin-bottom: 5px;
+}
+
+/* Leaderboard Styling */
+.leaderboard-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #e2e8f0;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.leaderboard-item:nth-child(odd) {
+    background-color: #f8f9fa;
+}
+
+.leaderboard-item:nth-child(even) {
+    background-color: white;
+}
+
+.leaderboard-item:last-child {
+    border-bottom: none;
+}
+
+.participant-info {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+}
+
+.participant-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+    word-wrap: break-word;
+}
+
+.score {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #A63A5A; /* CHANGED from #2F5EA2 to warm burgundy-red */
+    margin-top: 10px;
+}
+
+/* Book Carousel - Mobile First with External Arrows - UPDATED COLORS */
+.book-carousel-wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    margin-top: 15px;
+    gap: 10px;
+  
+  
+  
+}
+
+.carousel-arrow {
+    width: 40px;
+    height: 40px;
+    background: #8B4B6B; /* CHANGED from #728692 to harmonious purple-burgundy */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.carousel-arrow:hover:not(:disabled),
+.carousel-arrow:focus:not(:disabled) {
+    background: #6d3a53; /* Darker shade of the new color */
+    outline: 2px solid #A63A5A; /* CHANGED from #2F5EA2 to warm burgundy-red */
+    outline-offset: 2px;
+    transform: scale(1.1);
+}
+
+.carousel-arrow:disabled {
+    background: #ccc;
+    color: #999;
+    cursor: not-allowed;
+    transform: none;
+    opacity: 0.5;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.carousel-arrow.left {
+    order: 1;
+}
+
+.carousel-arrow.right {
+    order: 3;
+}
+
+.book-carousel-container {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    padding: 10px;
+    box-sizing: border-box;
+    flex: 1;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    order: 2;
+    border-radius: 8px;
+    background: transparent;
+}
+
+.book-carousel-container::-webkit-scrollbar {
+    display: none;
+}
+
+.carousel-book {
+    flex: 0 0 auto;
+    width: 110px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 5px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+
+.carousel-book:hover,
+.carousel-book:focus {
+    background-color: transparent; /* CHANGED from rgba(166, 58, 90, 0.1) */
+    transform: translateY(-2px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+   
+}
+.carousel-book:hover,
+.carousel-book:focus {
+    background-color:transparent;
+    transform: translateY(-2px);
+}
+
+/* ADD THE NEW CSS HERE */
+/* Disable hover effects for partially visible items */
+.carousel-book:not(.fully-visible):hover,
+.carousel-book:not(.fully-visible):focus {
+    background-color: transparent !important;
+    transform: none !important;
+    cursor: default;
+}
+
+/* Only allow hover effects on fully visible items */
+.carousel-book.fully-visible:hover,
+.carousel-book.fully-visible:focus {
+    background-color: transparent;
+    transform: translateY(-2px);
+    cursor: pointer;
+}
+
+/* Visual indicator for partially visible items (optional) */
+.carousel-book:not(.fully-visible) {
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.carousel-book.fully-visible {
+    opacity: 1;
+    transition: opacity 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Only show focus styles when using keyboard (not mouse) */
+.carousel-book:focus-visible {
+    outline: none;
+}
+
+.carousel-book img {
+    width: 80px;
+    height: 120px;
+    object-fit: cover;
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    margin-bottom: 6px;
+    box-sizing: border-box;
+    display: block;
+}
+
+.carousel-book .book-title,
+.carousel-book .book-author,
+.carousel-book .carousel-challenge {
+    font-size: 11px;
+    line-height: 1.3;
+    margin: 3px 0;
+    word-wrap: break-word;
+    max-width: 100%;
+    overflow: hidden;
+    text-align: center;
+}
+
+.carousel-book .book-title {
+    font-weight: bold;
+    color: #A63A5A; /* CHANGED from #2F5EA2 to warm burgundy-red */
+}
+
+.carousel-book .book-author {
+    color: #666;
+}
+
+.carousel-book .carousel-challenge {
+    color: #000;
+    font-weight: bold;
+}
+
+.carousel-book-cover.error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: #666;
+    text-align: center;
+    padding: 2px;
+    background: #f5f5f5;
+}
+
+.error {
+    text-align: center;
+    padding: 40px;
+    color: #dc2626;
+}
+
+/* Book Reviews Styling - UPDATED COLORS */
+.book-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.book-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.book-cover {
+    width: 50px;
+    height: 70px;
+    object-fit: cover;
+    margin-right: 8px;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    flex-shrink: 0;
+}
+
+.book-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.book-title {
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: #A63A5A; /* CHANGED from #2F5EA2 to warm burgundy-red */
+    margin-bottom: 3px;
+    line-height: 1.3;
+    word-wrap: break-word;
+}
+
+.book-author {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 5px;
+    word-wrap: break-word;
+}
+
+.book-description {
+    font-size: 0.8rem;
+    color: #555;
+    line-height: 1.4;
+    word-wrap: break-word;
+}
+
+.reviews-header {
+    background: #E62E3A;
+    padding: 5px 10px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    margin: -15px -15px 15px -15px;
+}
+
+/* Accessibility helpers */
+.carousel-live-region {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+/* Tablet Styles */
+@media (min-width: 769px) {
+    .container,
+    .menu-bar,
+    .date-bar {
+        padding: 0 20px;
+    }
+    
+    .main-content-inner {
+        grid-template-columns: 2fr 1fr;
+        gap: 20px;
+    }
+    
+    .menu-bar {
+        padding: 10px 20px;
+    }
+    
+    .menu-bar a {
+        display: inline-block;
+        width: auto;
+        margin: 0 5px;
+        font-size: 20px;
+        padding: 8px 12px;
+    }
+    
+    .stats-visible {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .leaderboard-item {
+        flex-direction: row;
+        align-items: center;
+        text-align: left;
+    }
+    
+    .participant-info {
+        margin-right: 15px;
+    }
+    
+    .participant-name {
+        margin-bottom: 3px;
+    }
+    
+    .score {
+        text-align: right;
+        min-width: 80px;
+        flex-shrink: 0;
+        margin-top: 0;
+    }
+    
+    .carousel-book {
+        width: 130px;
+    }
+    
+    .carousel-book img {
+        width: 90px;
+        height: 135px;
+    }
+    
+    .carousel-book .book-title,
+    .carousel-book .book-author,
+    .carousel-book .carousel-challenge {
+        font-size: 12px;
+    }
+    
+    .book-cover {
+        width: 60px;
+        height: 80px;
+        margin-right: 12px;
+    }
+    
+    .book-carousel-container {
+    display: flex;
+    gap: 10px;
+    padding: 10px 40px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    justify-content: flex-start; /* default to left-aligned */
+    }
+}
+
+/* Desktop Styles */
+@media (min-width: 1024px) {
+    .main-content-inner {
+        grid-template-columns: 3fr 1fr;
+        gap: 30px;
+    }
+    
+    .menu-bar a {
+        font-size: clamp(24px, 3vw, 32px);
+        margin: 0 8px;
+        padding: 10px 15px;
+    }
+    
+    .stats-visible {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .carousel-book {
+        width: 155px;
+    }
+    
+    .carousel-book img {
+        width: 110px;
+        height: 165px;
+    }
+    
+    .carousel-book .book-title,
+    .carousel-book .book-author,
+    .carousel-book .carousel-challenge {
+        font-size: 14px;
+    }
+    
+    .carousel-arrow {
+        width: 44px;
+        height: 44px;
+        font-size: 18px;
+    }
+    
+    .book-carousel-container {
+        padding: 15px;
+        gap: 10px;
+    }
+}
+
+/* Large Desktop */
+@media (min-width: 1200px) {
+    .container,
+    .menu-bar,
+    .date-bar,
+    .main-content {
+        padding: 0 0;
+    }
+    
+    .main-content-inner {
+        padding: 0 15px;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .s-lib-box {
+        border: 2px solid #000;
+    }
+    
+    .carousel-arrow {
+        background: #000;
+        border: 2px solid #fff;
+    }
+    
+    .menu-bar a:hover,
+    .menu-bar a:focus {
+        background-color: transparent; /* Remove background effect */
+        text-decoration: underline;
+        text-underline-offset: 3px; /* Slightly smaller offset for mobile */
+        text-decoration-thickness: 2px;
+        transform: none; /* Remove transform effects */
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .carousel-book,
+    .stats-visible,
+    .menu-bar a,
+    .carousel-arrow {
+        transition: none;
+    }
+    
+    .spinner {
+        animation: none;
+    }
+    
+    .book-carousel-container {
+        scroll-behavior: auto;
+    }
+}
+
+/* Print styles */
+@media print {
+    .carousel-arrow,
+    .menu-bar,
+    .spinner,
+    .loading {
+        display: none;
+    }
+    
+    .leaderboard-item {
+        break-inside: avoid;
+    }
+    
+    .book-carousel-container {
+        overflow: visible;
+        flex-wrap: wrap;
+    }
+}
+
+/* Focus management improvements - UPDATED COLORS */
+.carousel-book:focus-visible,
+.menu-bar a:focus-visible,
+.breadcrumb a:focus-visible {
+    outline: 2px solid #A63A5A; /* CHANGED from #2F5EA2 to warm burgundy-red */
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Utility classes for overflow prevention */
+.participant,
+.leaderboard-item {
+    overflow: visible !important;
+}
+
+img,
+.book-title,
+.book-author,
+.leaderboard-item {
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-wrap: break-word;
+}

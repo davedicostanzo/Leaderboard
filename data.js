@@ -348,6 +348,8 @@ console.log('Fetching data from hardcoded URL:', hardcodedUrl);
  * Start polling for updates
  */
 export function startPolling(onUpdate) {
+    console.log('=== STARTPOLLING CALLED ===');
+    console.log('onUpdate function:', onUpdate);
     let hasInitialData = false;
     
     // Initial fetch with retry
@@ -413,5 +415,6 @@ function onUpdate(data) {
     // ... rest of your onUpdate code
 
 }
+
 
 

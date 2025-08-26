@@ -5,7 +5,7 @@ export const CONFIG = {
     SHEET_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRGYu9wBs7mJjvQhJt-MIcBejYVeXSSPbREaslRHty3WmXRepVk7i99OqmmmoWNjoQsmXbCIBiQnwiu/export?format=csv&gid=1299984813',
     POLL_INTERVAL: 60000
 };
-
+console.log('CONFIG loaded successfully');
 // Challenge mapping for converting numbers back to descriptions
 export const challengeMap = {
     1: "Read a book recommended by a librarian",
@@ -417,6 +417,7 @@ function onUpdate(data) {
     // ... rest of your onUpdate code
 
 }
+
 
 
 

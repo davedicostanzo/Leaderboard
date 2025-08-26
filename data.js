@@ -217,8 +217,8 @@ export function parseCSVToLeaderboard(csvText) {
     for (let i = 1; i < lines.length; i++) {
         const row = parseCSVRow(lines[i]);
         
-        // Only process entries marked for publication (Column L - index 11)
-        const isPublished = row[11] && row[11].toString().toUpperCase() === 'TRUE';
+        // Only process entries marked for publication (Column M - index 12)
+        const isPublished = row[12] && row[12].toString().toUpperCase() === 'TRUE';
         if (!isPublished) continue; // Skip unpublished entries
         
         const email = row[1];
@@ -428,6 +428,7 @@ function onUpdate(data) {
     // ... rest of your onUpdate code
 
 }
+
 
 
 

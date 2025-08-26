@@ -2,8 +2,8 @@
 
 // Configuration
 export const CONFIG = {
-    SHEET_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRGYu9wBs7mJjvQhJt-MIcBejYVeXSSPbREaslRHty3WmXRepVk7i99OqmmmoWNjoQsmXbCIBiQnwiu/export?format=csv&gid=1299984813', // Add your published CSV URL here
-    POLL_INTERVAL: 60000, // 60 seconds
+    SHEET_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRGYu9wBs7mJjvQhJt-MIcBejYVeXSSPbREaslRHty3WmXRepVk7i99OqmmmoWNjoQsmXbCIBiQnwiu/export?format=csv&gid=1299984813',
+    POLL_INTERVAL: 60000
 };
 
 // Challenge mapping for converting numbers back to descriptions
@@ -417,6 +417,7 @@ function onUpdate(data) {
     // ... rest of your onUpdate code
 
 }
+
 
 
 

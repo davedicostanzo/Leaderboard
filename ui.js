@@ -100,47 +100,21 @@ export function updateStats(data) {
 }
 
 /**
- * Animate number changes for statistics
+ * Show stats panel if available
  */
-export function animateNumber(elementId, targetValue) {
-    const element = document.getElementById(elementId);
-    if (!element) return;
-    
-    const startValue = parseInt(element.textContent) || 0;
-    const duration = 1000; // 1 second
-    const startTime = performance.now();
-    
-    function animate(currentTime) {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        
-        // Easing function for smooth animation
-        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
-        const currentValue = Math.round(startValue + (targetValue - startValue) * easeOutQuart);
-        
-        element.textContent = currentValue;
-        element.setAttribute('aria-valuenow', currentValue);
-        
-        if (progress < 1) {
-            requestAnimationFrame(animate);
-        }
+export function showStats() {
+    const statsPanel = document.getElementById('stats-panel');
+    if (statsPanel) {
+        statsPanel.style.display = 'block';
     }
-    
-    requestAnimationFrame(animate);
 }
 
 /**
- * Show statistics box with animation
+ * Animate numbers in stats panel
  */
-export function showStats() {
-    const statsBox = document.getElementById('statsBox');
-    if (statsBox) {
-        statsBox.classList.remove('stats-hidden');
-        statsBox.classList.add('stats-visible');
-        
-        // Trigger reflow for animation
-        statsBox.offsetHeight;
-        statsBox.style.opacity = '1';
-        statsBox.style.transform = 'translateY(0)';
-    }
+export function animateNumber(elementId, value) {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+    // Simple animation (could be improved)
+    el.textContent = `${value}`;
 }

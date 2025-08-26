@@ -26,7 +26,7 @@ export function renderLeaderboard(data, onRenderComplete) {
                     <div class="leaderboard-item" role="listitem" id="${participantId}">
                         <div class="participant-info">
                             <div class="participant-name" id="${participantId}-name">
-                                ${escapeHtml(participant.name)} - 
+                                ${escapeHtml(participant.name)} ${participant.status ? '- ' + escapeHtml(participant.status) : ''} - 
                                 ${participant.booksRead} ${participant.booksRead === 1 ? 'challenge' : 'challenges'} completed
                             </div>
                             ${participant.books && participant.books.length > 0 ? 

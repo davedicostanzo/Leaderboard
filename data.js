@@ -306,6 +306,7 @@ console.log('Response status:', response.status);
         const csvText = await response.text();
         console.log('CSV data length:', csvText.length);
         console.log('First 200 chars:', csvText.substring(0, 200));
+        console.log('CSV text preview:', csvText);
         
         const newData = parseCSVToLeaderboard(csvText);
         
@@ -417,6 +418,7 @@ function onUpdate(data) {
     // ... rest of your onUpdate code
 
 }
+
 
 
 

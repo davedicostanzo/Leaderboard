@@ -324,10 +324,10 @@ console.log('Response status:', response.status);
             reviewsData = newData.reviews;
             lastSuccessfulFetch = Date.now();
             
-            console.log('✓ Successfully updated:', participants.length, 'participants,', totalReviews, 'reviews');
-            console.log('Raw parsed data length:', data.length);
-            console.log('Sample parsed row:', data[0]);
-            console.log('Participants:', participants);
+            console.log('✓ Successfully updated:', allData.length, 'participants,', totalReviews, 'reviews');
+            console.log('Raw parsed data length:', newData.participants.length);
+            console.log('Sample parsed row:', newData.participants[0]);
+            console.log('Participants:', allData);
             console.log('Participants:', allData.map(p => `${p.name}: ${p.booksRead} books`));
         } else {
             console.log('⚠️ Received empty data, keeping existing data');
@@ -428,6 +428,7 @@ function onUpdate(data) {
     // ... rest of your onUpdate code
 
 }
+
 
 
 

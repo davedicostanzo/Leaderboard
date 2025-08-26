@@ -2,7 +2,7 @@
 
 // Configuration
 export const CONFIG = {
-    SHEET_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRGYu9wBs7mJjvQhJt-MIcBejYVeXSSPbREaslRHty3WmXRepVk7i99OqmmmoWNjoQsmXbCIBiQnwiu/export?format=csv&gid=1299984813',
+    SHEET_CSV_URL: 'https://docs.google.com/spreadsheets/d/19lrKP2qffpZWjYkXfp4BVDs1wjkJc91OUD5Tw7acjI4/export?format=csv&gid=1299984813',
     POLL_INTERVAL: 60000
 };
 
@@ -428,6 +428,7 @@ function onUpdate(data) {
     // ... rest of your onUpdate code
 
 }
+
 
 
 

@@ -311,7 +311,7 @@ console.log('Response status:', response.status);
         console.log('About to call parseCSVToLeaderboard with CSV of length:', csvText.length);
         const newData = parseCSVToLeaderboard(csvText);
 
-        onsole.log('=== PARSING DEBUG ===');
+        console.log('=== PARSING DEBUG ===');
         console.log('Raw CSV lines:', csvText.split('\n').length);
         console.log('Parsed participants:', newData.participants.length);
         console.log('Parsed reviews:', newData.reviews.length);
@@ -428,6 +428,7 @@ function onUpdate(data) {
     // ... rest of your onUpdate code
 
 }
+
 
 
 

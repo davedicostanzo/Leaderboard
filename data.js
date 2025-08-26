@@ -272,7 +272,10 @@ export function parseCSVToLeaderboard(csvText) {
 /**
  * Function to fetch latest data from Google Sheets
  */
-export async function fetchLatestData() {
+export async function fetchLatestData() 
+    console.log('=== DEBUG CONFIG ===');
+    console.log('CONFIG:', CONFIG);
+    console.log('CONFIG.SHEET_CSV_URL:', CONFIG.SHEET_CSV_URL);{
     if (!CONFIG.SHEET_CSV_URL) {
         console.log('Sheet CSV URL not configured, using sample data');
         // Only use sample data if we have no real data yet
@@ -407,4 +410,5 @@ function onUpdate(data) {
     console.log('Reviews:', data.reviews?.length || 0);
     console.log('First participant:', data.participants?.[0]);
     // ... rest of your onUpdate code
+
 }

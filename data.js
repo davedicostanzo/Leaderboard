@@ -296,6 +296,8 @@ console.log('Fetching data from hardcoded URL:', hardcodedUrl);
         'Pragma': 'no-cache'
     }
 });
+        console.log('Response URL after fetch:', response.url);
+console.log('Response status:', response.status);
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -415,6 +417,7 @@ function onUpdate(data) {
     // ... rest of your onUpdate code
 
 }
+
 
 
 

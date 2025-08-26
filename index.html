@@ -5,143 +5,115 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Approved Books Leaderboard</title>
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    padding: 20px;
-    background-color: #f9f9f9;
-  }
+  <body>
+    <!-- Skip link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
 
-  .reader-container {
-    margin-bottom: 30px;
-  }
+    <!-- Library Header -->
+    <header id="s-lib-banner">
+        <div class="container">
+            <a href="https://westportlibrary.org">
+                <img class="banner-img" 
+                     src="https://d2jv02qf7xgjwx.cloudfront.net/sites/7716/banner/The_Westport_Library...__2_.png" 
+                     alt="The Westport Library"
+                     loading="eager">
+            </a>
+        </div>
+    </header>
 
-  .reader-name {
-    font-weight: bold;
-    margin-bottom: 10px;
-    font-size: 16px;
-  }
+    <!-- Challenge Banner -->
+    <div class="challenge-banner">
+        <div class="container">
+            <img class="banner-image" 
+                 src="https://d2jv02qf7xgjwx.cloudfront.net/accounts/78445/images/summer_reading_challenge_2025_banner.png" 
+                 alt="Summer Reading Challenge 2025 Banner"
+                 loading="lazy">
+        </div>
+    </div>
 
-  .book-gallery {
-    display: flex;
-    overflow-x: auto;
-    gap: 15px;
-    padding-bottom: 5px;
-  }
+    <!-- Navigation Menu -->
+<div class="menu-bar-wrapper">
+  <div class="container">
+    <nav class="menu-bar" aria-label="Summer Reading Challenge navigation">
+        <a href="https://westportlibrary.libguides.com/SRC2025Instructions">Instructions</a>
+        <a href="https://westportlibrary.libguides.com/SRC2025Categories">Categories</a>
+        <a href="https://westportlibrary.libguides.com/2025SRCSubmissionForm">Submit Your Challenge</a>
+        <a href="https://westportlibrary.libguides.com/SRC2025Leaderboard" aria-current="page">Leaderboard</a>
+    </nav>
+  </div>
+</div>
 
-  .book-gallery::-webkit-scrollbar {
-    height: 8px;
-  }
+    
+    <!-- Date Bar -->
+<div class="date-bar-wrapper">
+  <div class="container">
+    <div class="date-bar" role="banner">
+        <time datetime="2025-06-02/2025-08-29">June 2 through August 29!</time>
+    </div>
+  </div>
+</div>
 
-  .book-gallery::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 4px;
-  }
 
-  .entry {
-    min-width: 120px;
-    text-align: center;
-    background-color: #fff;
-    padding: 8px;
-    border-radius: 6px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    flex-shrink: 0;
-  }
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+        <div class="main-content-inner">
+            
+            <!-- Main Column -->
+            <div class="main-column">
+                
+                <!-- Stats Section -->
+                <div class="stats-grid stats-hidden" id="statsBox" aria-live="polite">
+                    <div class="stat-box">
+                        <div class="stat-title">Total Participants</div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="totalParticipants" aria-label="Total participants">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-title">Books Read</div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="totalBooks" aria-label="Total books read">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-title">Average per Person</div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="avgBooks" aria-label="Average books per person">0</div>
+                        </div>
+                    </div>
+                </div>
 
-  .entry img.cover {
-    width: 100px;
-    height: 150px;
-    object-fit: cover;
-    margin-bottom: 6px;
-    border-radius: 4px;
-  }
+                <!-- Leaderboard Box -->
+                <section class="s-lib-box">
+                    <h2 class="s-lib-box-title">Leaderboard</h2>
+                    <div class="s-lib-box-content" style="padding: 0;">
+                        <div id="content" aria-live="polite" aria-busy="true">
+                            <div class="loading">
+                                <div class="spinner" aria-hidden="true"></div>
+                                <p>Loading leaderboard data...</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
-  .entry strong {
-    display: block;
-    font-size: 14px;
-    line-height: 1.2;
-  }
-</style>
-</head>
-<body>
+            </div>
 
-<h2>Approved Books Leaderboard</h2>
-<div id="leaderboard"></div>
+            <!-- Sidebar Column -->
+            <aside class="sidebar-column">
+                <section class="s-lib-box">
+                    <div class="s-lib-box-content">
+                        <!-- Reviews content will be dynamically inserted by JavaScript -->
+                        <!-- This content is now handled by the renderReviews() function -->
+                    </div>
+                </section>
+            </aside>
 
-<script>
-// Embedded JSON data
-const data = [
-  {
-    "Name": "Alice",
-    "Challenge": "Mystery May",
-    "BookTitle": "The Hound of the Baskervilles",
-    "Author": "Arthur Conan Doyle",
-    "Stars": 5,
-    "Review": "Great read!",
-    "PolarisLink": "",
-    "Approved": true,
-    "CoverURL": "https://covers.openlibrary.org/b/id/240727-S.jpg"
-  },
-  {
-    "Name": "Alice",
-    "Challenge": "Thriller Thursday",
-    "BookTitle": "Gone Girl",
-    "Author": "Gillian Flynn",
-    "Stars": 4,
-    "Review": "Couldn't put it down!",
-    "PolarisLink": "",
-    "Approved": true,
-    "CoverURL": "https://covers.openlibrary.org/b/id/240728-S.jpg"
-  },
-  {
-    "Name": "Bob",
-    "Challenge": "Sci-Fi September",
-    "BookTitle": "Dune",
-    "Author": "Frank Herbert",
-    "Stars": 5,
-    "Review": "Loved it!",
-    "PolarisLink": "",
-    "Approved": true,
-    "CoverURL": "https://covers.openlibrary.org/b/id/240729-S.jpg"
-  }
-];
+        </div>
+    </main>
+  <div id="app"></div>
 
-// Group books by reader
-const grouped = {};
-data.forEach(book => {
-  if (!book.Approved) return;
-  if (!grouped[book.Name]) grouped[book.Name] = [];
-  grouped[book.Name].push(book);
-});
-
-// Populate leaderboard
-const container = document.getElementById('leaderboard');
-
-for (const [reader, books] of Object.entries(grouped)) {
-  const readerDiv = document.createElement('div');
-  readerDiv.className = 'reader-container';
-
-  const nameDiv = document.createElement('div');
-  nameDiv.className = 'reader-name';
-  nameDiv.textContent = reader;
-  readerDiv.appendChild(nameDiv);
-
-  const galleryDiv = document.createElement('div');
-  galleryDiv.className = 'book-gallery';
-
-  books.forEach(book => {
-    const div = document.createElement('div');
-    div.className = 'entry';
-    const challenge = book.Challenge || "Completed Challenge";
-    const cover = book.CoverURL || 'https://via.placeholder.com/100x150?text=No+Cover';
-    div.innerHTML = `<strong>${challenge}</strong>
-                     <img class="cover" src="${cover}" alt="${challenge}">`;
-    galleryDiv.appendChild(div);
-  });
-
-  readerDiv.appendChild(galleryDiv);
-  container.appendChild(readerDiv);
-}
-</script>
+<script type="module" src="https://davedicostanzo.github.io/leaderboard/main.js"></script>
 
 </body>
 </html>
+

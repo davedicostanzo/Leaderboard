@@ -309,6 +309,12 @@ console.log('Response status:', response.status);
         console.log('CSV text preview:', csvText);
         
         const newData = parseCSVToLeaderboard(csvText);
+
+        onsole.log('=== PARSING DEBUG ===');
+        console.log('Raw CSV lines:', csvText.split('\n').length);
+        console.log('Parsed participants:', newData.participants.length);
+        console.log('Parsed reviews:', newData.reviews.length);
+        console.log('First parsed participant:', newData.participants[0]);
         
         // Only update if we got valid data (at least some participants or this is our first successful fetch)
         if (newData.participants.length > 0 || lastSuccessfulFetch === null) {
@@ -418,6 +424,7 @@ function onUpdate(data) {
     // ... rest of your onUpdate code
 
 }
+
 
 
 

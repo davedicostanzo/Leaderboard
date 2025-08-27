@@ -258,15 +258,17 @@ export function parseCSVToLeaderboard(csvText) {
             catalogURL: catalogURL && catalogURL.startsWith('http') ? catalogURL : null
         });
 
-        // Add to reviews if 4+ stars and has review text
-        if (stars >= 4 && review && review.trim()) {
-            reviews.push({
-                title: bookTitle,
-                author: author,
-                isbn: extractISBNFromCoverURL(coverURL),
-                description: `${review.trim()} - ${stars} Stars from ${name}`
-            });
-        }
+// Add to reviews if 4+ stars and has review text
+if (stars >= 4 && review && review.trim()) {
+    reviews.push({
+        title: bookTitle,
+        author: author,
+        olid: bookOLID,  // ADD THIS - same olid as used in carousel
+        isbn: extractISBNFromCoverURL(coverURL),
+        description: `${review.trim()} - ${stars} Stars from ${name}`,
+        coverURL: finalCoverURL  // ADD THIS - same cover URL logic
+    });
+}
     }
 
     return {
@@ -435,6 +437,7 @@ function onUpdate(data) {
     // ... rest of your onUpdate code
 
 }
+
 
 
 

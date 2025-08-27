@@ -57,7 +57,7 @@ export function renderLeaderboard(data, onRenderComplete) {
  * Get cover URL for review book - use the same logic as the carousel
  */
 function getReviewCoverUrl(review) {
-    // Use the cover URL from the review data if it exists and is valid
+    // Use the cover URL from the processed data if it exists and is valid
     if (review.coverURL && review.coverURL.startsWith('http') && 
         !review.coverURL.includes('No Cover Available') && 
         !review.coverURL.includes('Not Found') &&
@@ -65,13 +65,9 @@ function getReviewCoverUrl(review) {
         return review.coverURL;
     }
     
-    // Fallback: Use OLID with Open Library (same as carousel logic)
-    if (review.olid && review.olid !== 'OL12345678M') {
-        return `https://covers.openlibrary.org/b/olid/${review.olid}-M.jpg`;
-    }
-    
-    // No valid cover found
+    // No valid cover
     return '';
+}
 }
 
 /**
@@ -188,3 +184,4 @@ export function showStats() {
         statsBox.style.transform = 'translateY(0)';
     }
 }
+

@@ -87,6 +87,20 @@ export function renderReviews(reviews = sampleReviewsData) {
     const reviewsHTML = `
         <h3 class="reviews-header">Reviews!</h3>
         ${reviews.map((review, index) => {
+            ${reviews.map((review, index) => {
+    console.log(`Rendering review ${index}:`, review.title, 'coverURL:', review.coverURL, 'isbn:', review.isbn);
+
+    // For sample data, use the Syndetics service with ISBN
+    let coverUrl = '';
+    if (review.isbn && !review.coverURL) {
+        coverUrl = `//syndetics.com/index.aspx?isbn=${review.isbn}/LC.GIF&client=springshare`;
+    } else {
+        coverUrl = getReviewCoverUrl(review);
+    }
+
+    // …rest of your HTML template
+}).join('')}
+
             // For sample data, use the Syndetics service with ISBN
             let coverUrl = '';
             if (review.isbn && !review.coverURL) {
@@ -186,6 +200,7 @@ export function showStats() {
         statsBox.style.transform = 'translateY(0)';
     }
 }
+
 
 
 

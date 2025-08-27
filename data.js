@@ -182,20 +182,25 @@ export function extractISBNFromCoverURL(coverURL) {
  * Function to parse CSV data from Google Sheets
  */
 export function parseCSVToLeaderboard(csvText) {
-    console.log('=== DATA PARSING START ===');
-    console.log('CSV length:', csvText.length);
-    
+    console.log('=== PARSING CSV DATA ===');
     const lines = csvText.trim().split('\n');
     const headers = lines[0].split(',');
-    
-    console.log('Headers found:', headers);
     console.log('Total lines:', lines.length);
+    console.log('Headers:', headers);
     
+         
     const participants = {};
     const reviews = [];
 
     for (let i = 1; i < lines.length; i++) {
         const row = parseCSVRow(lines[i]);
+        console.log(`Row ${i}:`, row); // Add this line
+    
+    // Only process entries marked for publication (Column L - index 11)
+    const isPublished = row[11] && row[11].toString().toUpperCase() === 'TRUE';
+    console.log(`Row ${i} published:`, isPublished); // Add this line
+    
+    if (!isPublished) continue;
         
         // Check if row has enough columns
         if (row.length < 13) {
@@ -421,4 +426,5 @@ export function setData(participants, reviews) {
 export function getData() {
     return { participants: allData, reviews: reviewsData };
 }
+
 

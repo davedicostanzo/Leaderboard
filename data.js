@@ -180,18 +180,26 @@ export function parseCSVRow(row) {
  * Helper function to extract OLID from Open Library cover URL
  */
 export function extractOLIDFromCoverURL(coverURL) {
-    if (!coverURL) return 'OL12345678M'; // Default placeholder
-    
-    // Try to extract OLID from Open Library cover URL pattern
-    // Pattern: https://covers.openlibrary.org/b/olid/OL12345678M-M.jpg
-    const olidMatch = coverURL.match(/\/olid\/([A-Z0-9]+)-[A-Z]\.jpg/i);
-    if (olidMatch) {
-        return olidMatch[1];
+    if (!coverURL || coverURL === 'No Cover Available' || coverURL === 'Not Found' || coverURL === 'Fetch Error') {
+        return null;
     }
     
-    // If no OLID found, return placeholder
-    return 'OL12345678M';
-}
+    console.log('Extracting ID/OLID from:', coverURL);
+    
+    // Try to extract ID or OLID from various Open Library URL patterns
+    const patterns = [
+        /\/id\/(\d+)-[A-Z]\.jpg/i,          // id pattern (like yours: /b/id/798170-L.jpg)
+        /\/olid\/([A-Z0-9]+)-[A-Z]\.jpg/i,  // olid pattern  
+        /\/isbn\/(\d+)-[A-Z]\.jpg/i         // isbn pattern
+    ];
+    
+    for (const pattern of patterns) {
+        const match = coverURL.match(pattern);
+        if (match) {
+            console.log('Found ID/OLID:', match[1]);
+            return match[1];
+        }
+    }
 
 /**
  * Helper function to extract ISBN from cover URL (if available)
@@ -535,6 +543,7 @@ function onUpdate(data) {
     // ... rest of your onUpdate code
 
 }
+
 
 
 

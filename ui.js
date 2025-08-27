@@ -92,15 +92,9 @@ export function renderReviews(reviews) {
 
         // Determine cover URL
         let coverUrl = '';
-        // if (review.isbn && !review.coverURL) {
-        //     // Sample data - use Syndetics
-        //     coverUrl = `//syndetics.com/index.aspx?isbn=${review.isbn}/LC.GIF&client=springshare`;
-        // } else {
-        //     // Real data - use existing cover
-        //     coverUrl = getReviewCoverUrl(review);
-        // }
+       
 
-        // Always use real cover URL logic (avoid Syndetics fallback)
+        // Always use real cover URL logic (avoid fallback)
         coverUrl = getReviewCoverUrl(review);
 
         return `
@@ -189,3 +183,4 @@ export function showStats() {
         statsBox.style.transform = 'translateY(0)';
     }
 }
+

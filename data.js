@@ -135,7 +135,7 @@ export function expandChallenge(challengeText) {
     
     // Handle special cases first
     if (expanded === 'memoir' || expanded === 'mystery or thriller' || expanded === 'graphic novel or comic') {
-        return `Read a ${expanded}`;
+        return `${expanded}`;
     }
     
     // If it doesn't start with common patterns, add "Read a book"
@@ -144,7 +144,7 @@ export function expandChallenge(challengeText) {
         !expanded.startsWith('about ') && 
         !expanded.startsWith('published ') &&
         !expanded.startsWith('over ')) {
-        return `Read a ${challengeText.toLowerCase()}`;
+        return `${challengeText.toLowerCase()}`;
     }
     
     return `${challengeText.toLowerCase()}`;
@@ -431,6 +431,7 @@ function onUpdate(data) {
     // ... rest of your onUpdate code
 
 }
+
 
 
 

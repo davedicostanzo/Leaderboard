@@ -10,13 +10,10 @@ import { sampleReviewsData } from './data.js';
 export function renderLeaderboard(data, onRenderComplete) {
     const content = document.getElementById('content');
     
-if (data.length === 0) {
-    content.innerHTML = '<div class="error">No data found.</div>';
-    // Add these lines:
-    updateStats([]);
-    showStats();
-    return;
-}
+    if (data.length === 0) {
+        content.innerHTML = '<div class="error">No data found.</div>';
+        return;
+    }
 
     // Sort by booksRead instead of score
     const sortedData = [...data].sort((a, b) => b.booksRead - a.booksRead);
@@ -29,7 +26,7 @@ if (data.length === 0) {
                     <div class="leaderboard-item" role="listitem" id="${participantId}">
                         <div class="participant-info">
                             <div class="participant-name" id="${participantId}-name">
-                                ${escapeHtml(participant.name)} - 
+                                ${escapeHtml(participant.name)} ${participant.status ? '- ' + escapeHtml(participant.status) : ''} - 
                                 ${participant.booksRead} ${participant.booksRead === 1 ? 'challenge' : 'challenges'} completed
                             </div>
                             ${participant.books && participant.books.length > 0 ? 
@@ -57,15 +54,30 @@ if (data.length === 0) {
 }
 
 /**
-// ALSO, update your renderReviews function in ui.js to add debug logging:
-
-export function renderReviews(reviews = sampleReviewsData) {
-    console.log('renderReviews called with:', reviews);
-    console.log('=== RENDER REVIEWS DEBUG ===');
-    console.log('Reviews received:', reviews);
-    console.log('Number of reviews:', reviews.length);
-    console.log('Sample review:', reviews[0]);
+ * Get cover URL for review book - use the same logic as the carousel
+ */
+function getReviewCoverUrl(review) {
+    // Use the cover URL from the review data if it exists and is valid
+    if (review.coverURL && review.coverURL.startsWith('http') && 
+        !review.coverURL.includes('No Cover Available') && 
+        !review.coverURL.includes('Not Found') &&
+        !review.coverURL.includes('Fetch Error')) {
+        return review.coverURL;
+    }
     
+    // Fallback: Use OLID with Open Library (same as carousel logic)
+    if (review.olid && review.olid !== 'OL12345678M') {
+        return `https://covers.openlibrary.org/b/olid/${review.olid}-M.jpg`;
+    }
+    
+    // No valid cover found
+    return '';
+}
+
+/**
+ * Render the reviews section
+ */
+export function renderReviews(reviews = sampleReviewsData) {
     const sidebarColumn = document.querySelector('.sidebar-column .s-lib-box-content');
     
     if (!sidebarColumn) {
@@ -73,29 +85,37 @@ export function renderReviews(reviews = sampleReviewsData) {
         return;
     }
 
+    console.log('Rendering reviews:', reviews.length, 'reviews');
+
     const reviewsHTML = `
         <h3 class="reviews-header">Reviews!</h3>
         ${reviews.map((review, index) => {
-            // Use the EXACT same cover logic as the carousel
-            const coverUrl = review.coverURL || (review.olid ? 
-                `https://covers.openlibrary.org/b/olid/${escapeHtml(review.olid)}-M.jpg` : 
-                'https://via.placeholder.com/150x200/6366f1/white?text=No+Cover'
-            );
+            // For sample data, use the Syndetics service with ISBN
+            let coverUrl = '';
+            if (review.isbn && !review.coverURL) {
+                // This is sample data - use Syndetics
+                coverUrl = `//syndetics.com/index.aspx?isbn=${review.isbn}/LC.GIF&client=springshare`;
+            } else {
+                // This is real data - use the same logic as the carousel
+                coverUrl = getReviewCoverUrl(review);
+            }
             
-            console.log(`Review ${index}:`, {
-                title: review.title,
-                olid: review.olid,
-                coverURL: review.coverURL,
-                finalCoverUrl: coverUrl
-            });
+            console.log(`Review ${index}: "${review.title}" - coverURL: ${review.coverURL}, final: ${coverUrl}`);
             
             return `
                 <article class="book-item">
-                    <img src="${coverUrl}" 
-                         alt="Book cover for ${escapeHtml(review.title)}" 
-                         class="book-cover"
-                         loading="lazy"
-                         onerror="this.src='https://via.placeholder.com/150x200/6366f1/white?text=No+Cover'; console.log('Image error for: ${escapeHtml(review.title)}')">
+                    ${coverUrl ? `
+                        <img src="${coverUrl}" 
+                             alt="Book cover for ${escapeHtml(review.title)}" 
+                             class="book-cover"
+                             loading="lazy"
+                             onerror="this.style.display='none'">
+                    ` : `
+                        <div class="book-cover-placeholder" 
+                             style="width: 50px; height: 70px; background: #f5f5f5; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #999; margin-right: 8px; flex-shrink: 0;">
+                            No Cover
+                        </div>
+                    `}
                     <div class="book-info">
                         <h4 class="book-title">${escapeHtml(review.title)}</h4>
                         <p class="book-author">by ${escapeHtml(review.author)}</p>
@@ -106,10 +126,8 @@ export function renderReviews(reviews = sampleReviewsData) {
         }).join('')}
     `;
     
-    console.log('Generated HTML:', reviewsHTML);
     sidebarColumn.innerHTML = reviewsHTML;
 }
-
 
 /**
  * Update statistics display
@@ -126,29 +144,11 @@ export function updateStats(data) {
 }
 
 /**
- * Show stats panel if available
- */
-export function showStats() {
-    const statsBox = document.getElementById('statsBox'); // Changed from 'stats-panel' to 'statsBox'
-    if (statsBox) {
-        statsBox.classList.remove('stats-hidden');
-        statsBox.classList.add('stats-visible', 'stats-loaded');
-        statsBox.style.display = 'grid';
-        console.log('Stats box shown');
-    } else {
-        console.error('Stats box not found');
-    }
-}
-
-/**
- * Animate numbers in stats panel
+ * Animate number changes for statistics
  */
 export function animateNumber(elementId, targetValue) {
     const element = document.getElementById(elementId);
-    if (!element) {
-        console.warn(`Element with ID '${elementId}' not found for stats animation`);
-        return;
-    }
+    if (!element) return;
     
     const startValue = parseInt(element.textContent) || 0;
     const duration = 1000; // 1 second
@@ -173,6 +173,18 @@ export function animateNumber(elementId, targetValue) {
     requestAnimationFrame(animate);
 }
 
-
-
-
+/**
+ * Show statistics box with animation
+ */
+export function showStats() {
+    const statsBox = document.getElementById('statsBox');
+    if (statsBox) {
+        statsBox.classList.remove('stats-hidden');
+        statsBox.classList.add('stats-visible');
+        
+        // Trigger reflow for animation
+        statsBox.offsetHeight;
+        statsBox.style.opacity = '1';
+        statsBox.style.transform = 'translateY(0)';
+    }
+}

@@ -10,10 +10,13 @@ import { sampleReviewsData } from './data.js';
 export function renderLeaderboard(data, onRenderComplete) {
     const content = document.getElementById('content');
     
-    if (data.length === 0) {
-        content.innerHTML = '<div class="error">No data found.</div>';
-        return;
-    }
+if (data.length === 0) {
+    content.innerHTML = '<div class="error">No data found.</div>';
+    // Add these lines:
+    updateStats([]);
+    showStats();
+    return;
+}
 
     // Sort by booksRead instead of score
     const sortedData = [...data].sort((a, b) => b.booksRead - a.booksRead);
@@ -103,18 +106,46 @@ export function updateStats(data) {
  * Show stats panel if available
  */
 export function showStats() {
-    const statsPanel = document.getElementById('stats-panel');
-    if (statsPanel) {
-        statsPanel.style.display = 'block';
+    const statsBox = document.getElementById('statsBox'); // Changed from 'stats-panel' to 'statsBox'
+    if (statsBox) {
+        statsBox.classList.remove('stats-hidden');
+        statsBox.classList.add('stats-visible', 'stats-loaded');
+        statsBox.style.display = 'grid';
+        console.log('Stats box shown');
+    } else {
+        console.error('Stats box not found');
     }
 }
 
 /**
  * Animate numbers in stats panel
  */
-export function animateNumber(elementId, value) {
-    const el = document.getElementById(elementId);
-    if (!el) return;
-    // Simple animation (could be improved)
-    el.textContent = `${value}`;
+export function animateNumber(elementId, targetValue) {
+    const element = document.getElementById(elementId);
+    if (!element) {
+        console.warn(`Element with ID '${elementId}' not found for stats animation`);
+        return;
+    }
+    
+    const startValue = parseInt(element.textContent) || 0;
+    const duration = 1000; // 1 second
+    const startTime = performance.now();
+    
+    function animate(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Easing function for smooth animation
+        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+        const currentValue = Math.round(startValue + (targetValue - startValue) * easeOutQuart);
+        
+        element.textContent = currentValue;
+        element.setAttribute('aria-valuenow', currentValue);
+        
+        if (progress < 1) {
+            requestAnimationFrame(animate);
+        }
+    }
+    
+    requestAnimationFrame(animate);
 }

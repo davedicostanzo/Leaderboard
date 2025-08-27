@@ -2,7 +2,7 @@
 
 import { escapeHtml } from './utils.js';
 import { generateBookCarousel } from './carousel.js';
-import { sampleReviewsData } from './data.js';
+// import { sampleReviewsData } from './data.js'; // Sample data import commented out
 
 /**
  * Render the main leaderboard
@@ -74,7 +74,8 @@ function getReviewCoverUrl(review) {
 /**
  * Render the reviews section
  */
-export function renderReviews(reviews = sampleReviewsData) {
+// export function renderReviews(reviews = sampleReviewsData) { // Default to sample data commented out
+export function renderReviews(reviews) {
     const sidebarColumn = document.querySelector('.sidebar-column .s-lib-box-content');
     
     if (!sidebarColumn) {
@@ -84,47 +85,49 @@ export function renderReviews(reviews = sampleReviewsData) {
 
     console.log('Rendering reviews:', reviews.length, 'reviews');
 
-const reviewsHTML = `
-  <h3 class="reviews-header">Reviews!</h3>
-  ${reviews.map((review, index) => {
-    console.log(`Rendering review ${index}:`, review.title, 'coverURL:', review.coverURL, 'isbn:', review.isbn);
+    const reviewsHTML = `
+      <h3 class="reviews-header">Reviews!</h3>
+      ${reviews.map((review, index) => {
+        console.log(`Rendering review ${index}:`, review.title, 'coverURL:', review.coverURL, 'isbn:', review.isbn);
 
-    // Determine cover URL
-    let coverUrl = '';
-    if (review.isbn && !review.coverURL) {
-        // Sample data - use Syndetics
-        coverUrl = `//syndetics.com/index.aspx?isbn=${review.isbn}/LC.GIF&client=springshare`;
-    } else {
-        // Real data - use existing cover
+        // Determine cover URL
+        let coverUrl = '';
+        // if (review.isbn && !review.coverURL) {
+        //     // Sample data - use Syndetics
+        //     coverUrl = `//syndetics.com/index.aspx?isbn=${review.isbn}/LC.GIF&client=springshare`;
+        // } else {
+        //     // Real data - use existing cover
+        //     coverUrl = getReviewCoverUrl(review);
+        // }
+
+        // Always use real cover URL logic (avoid Syndetics fallback)
         coverUrl = getReviewCoverUrl(review);
-    }
 
-    return `
-      <article class="book-item">
-        ${coverUrl ? `
-          <img src="${coverUrl}" 
-               alt="Book cover for ${escapeHtml(review.title)}" 
-               class="book-cover"
-               loading="lazy"
-               onerror="this.style.display='none'">
-        ` : `
-          <div class="book-cover-placeholder" 
-               style="width: 50px; height: 70px; background: #f5f5f5; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #999; margin-right: 8px; flex-shrink: 0;">
-            No Cover
-          </div>
-        `}
-        <div class="book-info">
-          <h4 class="book-title">${escapeHtml(review.title)}</h4>
-          <p class="book-author">by ${escapeHtml(review.author)}</p>
-          <p class="book-description">${escapeHtml(review.description)}</p>
-        </div>
-      </article>
+        return `
+          <article class="book-item">
+            ${coverUrl ? `
+              <img src="${coverUrl}" 
+                   alt="Book cover for ${escapeHtml(review.title)}" 
+                   class="book-cover"
+                   loading="lazy"
+                   onerror="this.style.display='none'">
+            ` : `
+              <div class="book-cover-placeholder" 
+                   style="width: 50px; height: 70px; background: #f5f5f5; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #999; margin-right: 8px; flex-shrink: 0;">
+                No Cover
+              </div>
+            `}
+            <div class="book-info">
+              <h4 class="book-title">${escapeHtml(review.title)}</h4>
+              <p class="book-author">by ${escapeHtml(review.author)}</p>
+              <p class="book-description">${escapeHtml(review.description)}</p>
+            </div>
+          </article>
+        `;
+      }).join('')}
     `;
-  }).join('')}
-`;
 
-sidebarColumn.innerHTML = reviewsHTML;
-
+    sidebarColumn.innerHTML = reviewsHTML;
 }
 
 /**
@@ -186,9 +189,3 @@ export function showStats() {
         statsBox.style.transform = 'translateY(0)';
     }
 }
-
-
-
-
-
-

@@ -211,66 +211,70 @@ export function extractISBNFromCoverURL(coverURL) {
 export function parseCSVToLeaderboard(csvText) {
     const lines = csvText.trim().split('\n');
     const headers = lines[0].split(',');
-    
-    // Expected columns: Timestamp, Email, Name, Challenge, Title, Author, Stars, Review, CoverURL, CatalogURL, Status, Publish Flag
-    // Column indices: 0=Timestamp, 1=Email, 2=Name, 3=Challenge, 4=Title, 5=Author, 6=Stars, 7=Review, 8=CoverURL, 9=CatalogURL, 10=Status, 11=Publish Flag
+
     const participants = {};
     const reviews = [];
-    
+
     for (let i = 1; i < lines.length; i++) {
         const row = parseCSVRow(lines[i]);
-        
+
         // Only process entries marked for publication (Column M - index 12)
         const isPublished = row[12] && row[12].toString().toUpperCase() === 'TRUE';
-        if (!isPublished) continue; // Skip unpublished entries
-        
+        if (!isPublished) continue;
+
         const email = row[1];
         const name = row[2];
-        const challengeText = row[3]; // Truncated challenge text from sheet
+        const challengeText = row[3];
         const bookTitle = row[4];
         const author = row[5];
         const stars = parseInt(row[6]) || 0;
         const review = row[7];
         const coverURL = row[8];
-        const catalogURL = row[9]; // Column J
-        const status = row[10]; // Column K
-        
-        // Group by email (unique identifier)
+        const catalogURL = row[9];
+        const status = row[10];
+
         if (!participants[email]) {
             participants[email] = {
                 name: name,
                 booksRead: 0,
                 books: [],
-                status: status // Add status to participant
+                status: status
             };
         }
-        
-        // Add book to participant with updated structure
+
         participants[email].booksRead++;
+
+        // Extract OLID and ensure a usable coverURL
+        const bookOLID = extractOLIDFromCoverURL(coverURL);
+        const finalCoverURL = coverURL && coverURL.startsWith('http')
+            ? coverURL
+            : `https://covers.openlibrary.org/b/olid/${bookOLID}-M.jpg`;
+
         participants[email].books.push({
             title: bookTitle,
-            olid: extractOLIDFromCoverURL(coverURL), // Extract OLID from cover URL if available
-            challenge: expandChallenge(challengeText), // Expand for display
-            coverURL: coverURL,
-            catalogURL: catalogURL && catalogURL.startsWith('http') ? catalogURL : null // Only use valid URLs
+            olid: bookOLID,
+            challenge: expandChallenge(challengeText),
+            coverURL: finalCoverURL,
+            catalogURL: catalogURL && catalogURL.startsWith('http') ? catalogURL : null
         });
-        
+
         // Add to reviews if 4+ stars and has review text
         if (stars >= 4 && review && review.trim()) {
             reviews.push({
                 title: bookTitle,
                 author: author,
-                isbn: extractISBNFromCoverURL(coverURL), // Extract ISBN if available
+                isbn: extractISBNFromCoverURL(coverURL),
                 description: `${review.trim()} - ${stars} Stars from ${name}`
             });
         }
     }
-    
-    // Convert participants object to array
-    const participantArray = Object.values(participants);
-    
-    return { participants: participantArray, reviews: reviews };
+
+    return {
+        participants: Object.values(participants),
+        reviews: reviews
+    };
 }
+
 
 /**
  * Function to fetch latest data from Google Sheets
@@ -431,6 +435,7 @@ function onUpdate(data) {
     // ... rest of your onUpdate code
 
 }
+
 
 
 

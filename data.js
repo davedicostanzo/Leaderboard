@@ -260,6 +260,13 @@ export function parseCSVToLeaderboard(csvText) {
 
         // Add to reviews if 4+ stars and has review text
         if (stars >= 4 && review && review.trim()) {
+            console.log('Adding review:', {
+            title: bookTitle,
+            author: author,
+            stars: stars,
+            review: review,
+            coverURL: coverURL
+    });
             reviews.push({
                 title: bookTitle,
                 author: author,
@@ -414,3 +421,4 @@ export function setData(participants, reviews) {
 export function getData() {
     return { participants: allData, reviews: reviewsData };
 }
+

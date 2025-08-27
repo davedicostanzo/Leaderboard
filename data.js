@@ -130,24 +130,24 @@ let lastSuccessfulFetch = null; // Track when we last got real data
 export function expandChallenge(challengeText) {
     if (!challengeText) return challengeText;
     
-    // Add back the "Read a book" or "Read a" prefix for full context
-    /*let expanded = challengeText.toLowerCase();
-    
+    // Keep the original text (don’t force lowercase)
+    let expanded = challengeText;
+
     // Handle special cases first
-    if (expanded === 'memoir' || expanded === 'mystery or thriller' || expanded === 'graphic novel or comic') {
-        return `${expanded}`;
+    if (expanded === 'Memoir' || expanded === 'Mystery or Thriller' || expanded === 'Graphic Novel or Comic') {
+        return expanded;
     }
-    
+
     // If it doesn't start with common patterns, add "Read a book"
-    if (!expanded.startsWith('recommended by') && 
-        !expanded.startsWith('with ') && 
-        !expanded.startsWith('about ') && 
-        !expanded.startsWith('published ') &&
-        !expanded.startsWith('over ')) {
-        return `${challengeText.toLowerCase()}`;
+    if (!expanded.startsWith('Recommended by') && 
+        !expanded.startsWith('With ') && 
+        !expanded.startsWith('About ') && 
+        !expanded.startsWith('Published ') &&
+        !expanded.startsWith('Over ')) {
+        return expanded;
     }
-    
-    return `${challengeText.toLowerCase()}`;*/
+
+    return expanded;
 }
 
 
@@ -431,6 +431,7 @@ function onUpdate(data) {
     // ... rest of your onUpdate code
 
 }
+
 
 
 

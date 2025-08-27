@@ -31,7 +31,8 @@ export function handleCarouselClick(e) {
         setTimeout(() => handleCarouselScroll(container), 300);
         
     } else if (e.target.closest('.carousel-book')) {
-        const book = e.target.closest('.carousel-book');
+        const target = e.target;
+const book = (target && typeof target.closest === 'function') ? target.closest('.carousel-book') : null;
         
         // Check if the book is fully visible
         const container = book.closest('.book-carousel-container');
@@ -176,4 +177,5 @@ export function getEventHandlers() {
         keydown: handleCarouselKeydown,
         scroll: handleCarouselScrollEvent
     };
+
 }

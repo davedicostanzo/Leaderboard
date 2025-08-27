@@ -211,7 +211,105 @@ export function extractISBNFromCoverURL(coverURL) {
 export function parseCSVToLeaderboard(csvText) {
     const lines = csvText.trim().split('\n');
     const headers = lines[0].split(',');
+// Add this comprehensive debug code to your data.js parseCSVToLeaderboard function
+// Add it right at the beginning, after const headers = lines[0].split(',');
 
+console.log('=== PARSING DEBUG START ===');
+console.log('Total CSV lines:', lines.length);
+console.log('Sample data line:', lines[1]); // Show raw CSV line
+
+// Then add this in your main parsing loop, right before the reviews.push section:
+
+console.log('=== ROW PROCESSING DEBUG ===');
+console.log('Row data:', row);
+console.log('Is Published:', isPublished);
+console.log('Stars:', stars);
+console.log('Review text:', review);
+console.log('Book Title:', bookTitle);
+console.log('Author:', author);
+console.log('Cover URL (raw):', coverURL);
+
+// Add to reviews if 4+ stars and has review text
+if (stars >= 4 && review && review.trim()) {
+    console.log('=== REVIEW CREATION DEBUG ===');
+    console.log('Creating review for:', bookTitle);
+    console.log('Cover URL:', coverURL);
+    console.log('Extracted OLID:', bookOLID);
+    console.log('Final Cover URL:', finalCoverURL);
+    
+    const reviewData = {
+        title: bookTitle,
+        author: author,
+        olid: bookOLID,
+        isbn: extractISBNFromCoverURL(coverURL),
+        description: `${review.trim()} - ${stars} Stars from ${name}`,
+        coverURL: finalCoverURL
+    };
+    
+    console.log('Review object:', reviewData);
+    reviews.push(reviewData);
+}
+
+// And add this at the very end of parseCSVToLeaderboard, before the return statement:
+
+console.log('=== FINAL RESULTS ===');
+console.log('Total participants:', Object.values(participants).length);
+console.log('Total reviews:', reviews.length);
+console.log('Reviews data:', reviews);
+console.log('Sample review:', reviews[0]);
+console.log('=== DEBUG END ===');
+
+// ALSO, update your renderReviews function in ui.js to add debug logging:
+
+export function renderReviews(reviews = sampleReviewsData) {
+    console.log('=== RENDER REVIEWS DEBUG ===');
+    console.log('Reviews received:', reviews);
+    console.log('Number of reviews:', reviews.length);
+    console.log('Sample review:', reviews[0]);
+    
+    const sidebarColumn = document.querySelector('.sidebar-column .s-lib-box-content');
+    
+    if (!sidebarColumn) {
+        console.error('Reviews container not found');
+        return;
+    }
+
+    const reviewsHTML = `
+        <h3 class="reviews-header">Reviews!</h3>
+        ${reviews.map((review, index) => {
+            // Use the EXACT same cover logic as the carousel
+            const coverUrl = review.coverURL || (review.olid ? 
+                `https://covers.openlibrary.org/b/olid/${escapeHtml(review.olid)}-M.jpg` : 
+                'https://via.placeholder.com/150x200/6366f1/white?text=No+Cover'
+            );
+            
+            console.log(`Review ${index}:`, {
+                title: review.title,
+                olid: review.olid,
+                coverURL: review.coverURL,
+                finalCoverUrl: coverUrl
+            });
+            
+            return `
+                <article class="book-item">
+                    <img src="${coverUrl}" 
+                         alt="Book cover for ${escapeHtml(review.title)}" 
+                         class="book-cover"
+                         loading="lazy"
+                         onerror="this.src='https://via.placeholder.com/150x200/6366f1/white?text=No+Cover'; console.log('Image error for: ${escapeHtml(review.title)}')">
+                    <div class="book-info">
+                        <h4 class="book-title">${escapeHtml(review.title)}</h4>
+                        <p class="book-author">by ${escapeHtml(review.author)}</p>
+                        <p class="book-description">${escapeHtml(review.description)}</p>
+                    </div>
+                </article>
+            `;
+        }).join('')}
+    `;
+    
+    console.log('Generated HTML:', reviewsHTML);
+    sidebarColumn.innerHTML = reviewsHTML;
+}
     const participants = {};
     const reviews = [];
 
@@ -437,6 +535,7 @@ function onUpdate(data) {
     // ... rest of your onUpdate code
 
 }
+
 
 
 

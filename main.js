@@ -1,7 +1,7 @@
 // main.js - Application initialization and coordination
 
 import { ResponsiveUtils, setupLazyLoading, handleImageError } from './utils.js';
-import { startPolling, sampleData, setData } from './data.js';
+import { startPolling, setData } from './data.js';
 import { renderLeaderboard, renderReviews } from './ui.js';
 import { 
     initializeCarousels, 
@@ -117,3 +117,4 @@ if (document.readyState === 'loading') {
 // Export for potential external access
 
 export { initializeApp, onDataUpdate, currentData };
+

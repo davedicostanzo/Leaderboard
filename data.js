@@ -59,7 +59,7 @@ export const sampleData = [
     }
 ];
 
-export const sampleReviewsData = [
+/* export const sampleReviewsData = [
     {
         title: "Dogtown",
         author: "Katherine Applegate; Gennifer Choldenko",
@@ -356,3 +356,4 @@ export function setData(participants, reviews) {
 export function getData() {
     return { participants: allData, reviews: reviewsData };
 }
+

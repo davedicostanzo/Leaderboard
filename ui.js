@@ -69,20 +69,28 @@ export function renderReviews(reviews = sampleReviewsData) {
 
     const reviewsHTML = `
         <h3 class="reviews-header">Reviews!</h3>
-        ${reviews.map(review => `
-            <article class="book-item">
-                <img src="//syndetics.com/index.aspx?isbn=${escapeHtml(review.isbn)}/LC.GIF&client=springshare" 
-                     alt="Book cover for ${escapeHtml(review.title)}" 
-                     class="book-cover"
-                     loading="lazy"
-                     onerror="this.style.display='none'">
-                <div class="book-info">
-                    <h4 class="book-title">${escapeHtml(review.title)}</h4>
-                    <p class="book-author">by ${escapeHtml(review.author)}</p>
-                    <p class="book-description">${escapeHtml(review.description)}</p>
-                </div>
-            </article>
-        `).join('')}
+        ${reviews.map(review => {
+            // Use the EXACT same cover logic as the carousel
+            const coverUrl = review.coverURL || (review.olid ? 
+                `https://covers.openlibrary.org/b/olid/${escapeHtml(review.olid)}-M.jpg` : 
+                'https://via.placeholder.com/150x200/6366f1/white?text=No+Cover'
+            );
+            
+            return `
+                <article class="book-item">
+                    <img src="${coverUrl}" 
+                         alt="Book cover for ${escapeHtml(review.title)}" 
+                         class="book-cover"
+                         loading="lazy"
+                         onerror="this.src='https://via.placeholder.com/150x200/6366f1/white?text=No+Cover'">
+                    <div class="book-info">
+                        <h4 class="book-title">${escapeHtml(review.title)}</h4>
+                        <p class="book-author">by ${escapeHtml(review.author)}</p>
+                        <p class="book-description">${escapeHtml(review.description)}</p>
+                    </div>
+                </article>
+            `;
+        }).join('')}
     `;
     
     sidebarColumn.innerHTML = reviewsHTML;
@@ -149,3 +157,4 @@ export function animateNumber(elementId, targetValue) {
     
     requestAnimationFrame(animate);
 }
+

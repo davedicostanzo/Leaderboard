@@ -237,26 +237,22 @@ console.log('Book Title:', bookTitle);
 console.log('Author:', author);
 console.log('Cover URL (raw):', coverURL);
 
-// Add to reviews if 4+ stars and has review text
-if (stars >= 4 && review && review.trim()) {
-    console.log('=== REVIEW CREATION DEBUG ===');
-    console.log('Creating review for:', bookTitle);
-    console.log('Cover URL:', coverURL);
-    console.log('Extracted OLID:', bookOLID);
-    console.log('Final Cover URL:', finalCoverURL);
-    
-    const reviewData = {
-        title: bookTitle,
-        author: author,
-        olid: bookOLID,
-        isbn: extractISBNFromCoverURL(coverURL),
-        description: `${review.trim()} - ${stars} Stars from ${name}`,
-        coverURL: finalCoverURL
-    };
-    
-    console.log('Review object:', reviewData);
-    reviews.push(reviewData);
-}
+/ Add to reviews if 4+ stars and has review text
+        if (stars >= 4 && review && review.trim()) {
+            console.log('=== CREATING REVIEW ===');
+            console.log('Title:', bookTitle);
+            console.log('Raw coverURL from CSV:', coverURL);
+            console.log('Extracted bookOLID:', bookOLID);
+            console.log('Final finalCoverURL:', finalCoverURL);
+            
+            reviews.push({
+                title: bookTitle,
+                author: author,
+                olid: bookOLID,  
+                isbn: extractISBNFromCoverURL(coverURL),
+                description: `${review.trim()} - ${stars} Stars from ${name}`,
+                coverURL: finalCoverURL  // This should be your working /id/ URL
+            });
 
 // And add this at the very end of parseCSVToLeaderboard, before the return statement:
 
@@ -543,6 +539,7 @@ function onUpdate(data) {
     // ... rest of your onUpdate code
 
 }
+
 
 
 

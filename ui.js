@@ -84,61 +84,47 @@ export function renderReviews(reviews = sampleReviewsData) {
 
     console.log('Rendering reviews:', reviews.length, 'reviews');
 
-    const reviewsHTML = `
-        <h3 class="reviews-header">Reviews!</h3>
-        ${reviews.map((review, index) => {
-            ${reviews.map((review, index) => {
+const reviewsHTML = `
+  <h3 class="reviews-header">Reviews!</h3>
+  ${reviews.map((review, index) => {
     console.log(`Rendering review ${index}:`, review.title, 'coverURL:', review.coverURL, 'isbn:', review.isbn);
 
-    // For sample data, use the Syndetics service with ISBN
+    // Determine cover URL
     let coverUrl = '';
     if (review.isbn && !review.coverURL) {
+        // Sample data - use Syndetics
         coverUrl = `//syndetics.com/index.aspx?isbn=${review.isbn}/LC.GIF&client=springshare`;
     } else {
+        // Real data - use existing cover
         coverUrl = getReviewCoverUrl(review);
     }
 
-    // …rest of your HTML template
-}).join('')}
-
-            // For sample data, use the Syndetics service with ISBN
-            let coverUrl = '';
-            if (review.isbn && !review.coverURL) {
-                console.log(review);
-                // This is sample data - use Syndetics
-                coverUrl = `//syndetics.com/index.aspx?isbn=${review.isbn}/LC.GIF&client=springshare`;
-            } else {
-                // This is real data - use the same logic as the carousel
-                coverUrl = getReviewCoverUrl(review);
-            }
-            
-            console.log(`Review ${index}: "${review.title}" - coverURL: ${review.coverURL}, final: ${coverUrl}`);
-            
-            return `
-                <article class="book-item">
-                    ${coverUrl ? `
-                        <img src="${coverUrl}" 
-                             alt="Book cover for ${escapeHtml(review.title)}" 
-                             class="book-cover"
-                             loading="lazy"
-                             onerror="this.style.display='none'">
-                    ` : `
-                        <div class="book-cover-placeholder" 
-                             style="width: 50px; height: 70px; background: #f5f5f5; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #999; margin-right: 8px; flex-shrink: 0;">
-                            No Cover
-                        </div>
-                    `}
-                    <div class="book-info">
-                        <h4 class="book-title">${escapeHtml(review.title)}</h4>
-                        <p class="book-author">by ${escapeHtml(review.author)}</p>
-                        <p class="book-description">${escapeHtml(review.description)}</p>
-                    </div>
-                </article>
-            `;
-        }).join('')}
+    return `
+      <article class="book-item">
+        ${coverUrl ? `
+          <img src="${coverUrl}" 
+               alt="Book cover for ${escapeHtml(review.title)}" 
+               class="book-cover"
+               loading="lazy"
+               onerror="this.style.display='none'">
+        ` : `
+          <div class="book-cover-placeholder" 
+               style="width: 50px; height: 70px; background: #f5f5f5; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #999; margin-right: 8px; flex-shrink: 0;">
+            No Cover
+          </div>
+        `}
+        <div class="book-info">
+          <h4 class="book-title">${escapeHtml(review.title)}</h4>
+          <p class="book-author">by ${escapeHtml(review.author)}</p>
+          <p class="book-description">${escapeHtml(review.description)}</p>
+        </div>
+      </article>
     `;
-    
-    sidebarColumn.innerHTML = reviewsHTML;
+  }).join('')}
+`;
+
+sidebarColumn.innerHTML = reviewsHTML;
+
 }
 
 /**
@@ -200,6 +186,7 @@ export function showStats() {
         statsBox.style.transform = 'translateY(0)';
     }
 }
+
 
 
 

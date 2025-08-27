@@ -21,6 +21,7 @@ export const challengeMap = {
 };
 
 // Sample data for testing/fallback
+/*
 export const sampleData = [
     { 
         name: "Caleb R.", 
@@ -58,7 +59,6 @@ export const sampleData = [
     }
 ];
 
-// Sample reviews data
 export const sampleReviewsData = [
     {
         title: "Dogtown",
@@ -79,6 +79,7 @@ export const sampleReviewsData = [
         description: "A powerful story about identity and finding yourself. Great for the \"character you love to hate\" challenge."
     }
 ];
+*/
 
 // Global data storage
 export let allData = [];
@@ -90,16 +91,13 @@ let lastSuccessfulFetch = null;
  */
 export function expandChallenge(challengeText) {
     if (!challengeText) return challengeText;
-    
-    // Keep the original text (don't force lowercase)
+
     let expanded = challengeText;
 
-    // Handle special cases first
     if (expanded === 'Memoir' || expanded === 'Mystery or Thriller' || expanded === 'Graphic Novel or Comic') {
         return expanded;
     }
 
-    // If it doesn't start with common patterns, add "Read a book"
     if (!expanded.startsWith('Recommended by') && 
         !expanded.startsWith('With ') && 
         !expanded.startsWith('About ') && 
@@ -118,7 +116,7 @@ export function parseCSVRow(row) {
     const result = [];
     let current = '';
     let inQuotes = false;
-    
+
     for (let i = 0; i < row.length; i++) {
         const char = row[i];
         
@@ -131,7 +129,7 @@ export function parseCSVRow(row) {
             current += char;
         }
     }
-    
+
     result.push(current.trim());
     return result;
 }
@@ -143,16 +141,15 @@ export function extractOLIDFromCoverURL(coverURL) {
     if (!coverURL || coverURL === 'No Cover Available' || coverURL === 'Not Found' || coverURL === 'Fetch Error') {
         return null;
     }
-    
+
     console.log('Extracting ID/OLID from:', coverURL);
-    
-    // Try to extract ID or OLID from various Open Library URL patterns
+
     const patterns = [
-        /\/id\/(\d+)-[A-Z]\.jpg/i,          // id pattern (like yours: /b/id/798170-L.jpg)
-        /\/olid\/([A-Z0-9]+)-[A-Z]\.jpg/i,  // olid pattern  
-        /\/isbn\/(\d+)-[A-Z]\.jpg/i         // isbn pattern
+        /\/id\/(\d+)-[A-Z]\.jpg/i,
+        /\/olid\/([A-Z0-9]+)-[A-Z]\.jpg/i,
+        /\/isbn\/(\d+)-[A-Z]\.jpg/i
     ];
-    
+
     for (const pattern of patterns) {
         const match = coverURL.match(pattern);
         if (match) {
@@ -160,27 +157,18 @@ export function extractOLIDFromCoverURL(coverURL) {
             return match[1];
         }
     }
-    
-    // If no pattern matches, return a default placeholder
+
     console.log('No ID/OLID found, using default');
     return 'OL12345678M';
 }
 
-/**
- * Helper function to extract ISBN from cover URL (if available)
- */
 export function extractISBNFromCoverURL(coverURL) {
     if (!coverURL) return '';
-    
-    // Extract ISBN from Open Library cover URL pattern
-    // Pattern: https://covers.openlibrary.org/b/isbn/1234567890-M.jpg
+
     const isbnMatch = coverURL.match(/\/isbn\/(\d+)-[A-Z]\.jpg/i);
     return isbnMatch ? isbnMatch[1] : '';
 }
 
-/**
- * Function to parse CSV data from Google Sheets
- */
 export function parseCSVToLeaderboard(csvText) {
     console.log('=== PARSING CSV DATA ===');
     const lines = csvText.trim().split('\n');
@@ -195,10 +183,7 @@ export function parseCSVToLeaderboard(csvText) {
         const row = parseCSVRow(lines[i]);
         console.log(`Row ${i}:`, row);
 
-        // Column mapping:
-        // 0=Timestamp, 1=Email, 2=Name, 3=Challenge, 4=Title, 5=Author
-        // 6=Stars, 7=Review, 8=CoverURL, 9=CatalogURL, 10=Status, 11=Verification Status, 12=Publish Flag
-        if (!row[12] || row[12].toUpperCase() !== 'TRUE') continue; // Only published
+        if (!row[12] || row[12].toUpperCase() !== 'TRUE') continue;
 
         const email = row[1];
         const name = row[2];
@@ -224,9 +209,8 @@ export function parseCSVToLeaderboard(csvText) {
 
         participants[email].booksRead++;
 
-        // Always generate a valid coverURL
         let bookOLID = extractOLIDFromCoverURL(rawCoverURL);
-        if (!bookOLID) bookOLID = 'OL12345678M'; // fallback OLID
+        if (!bookOLID) bookOLID = 'OL12345678M';
         const finalCoverURL = rawCoverURL && rawCoverURL.startsWith('http')
             ? rawCoverURL
             : `https://covers.openlibrary.org/b/olid/${bookOLID}-M.jpg`;
@@ -261,26 +245,15 @@ export function parseCSVToLeaderboard(csvText) {
     };
 }
 
-
-/**
- * Function to fetch latest data from Google Sheets
- */
 export async function fetchLatestData() {
     if (!CONFIG.SHEET_CSV_URL) {
-        console.log('Sheet CSV URL not configured, using sample data');
-        if (allData.length === 0) {
-            allData = sampleData;
-            reviewsData = sampleReviewsData;
-        }
+        console.log('Sheet CSV URL not configured, skipping fetch');
         return { participants: allData, reviews: reviewsData };
     }
-    
+
     try {
         console.log('Fetching data from:', CONFIG.SHEET_CSV_URL);
-        
-        // Add cache-busting to prevent stale data
         const cacheBustUrl = `${CONFIG.SHEET_CSV_URL}&cb=${Date.now()}`;
-        
         const response = await fetch(cacheBustUrl, {
             cache: 'no-cache',
             headers: {
@@ -288,42 +261,40 @@ export async function fetchLatestData() {
                 'Pragma': 'no-cache'
             }
         });
-        
+
         console.log('Response status:', response.status);
-        
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
+
         const csvText = await response.text();
         console.log('CSV data length:', csvText.length);
-        
-        if (csvText.length < 100) { // Sanity check for minimal CSV size
+
+        if (csvText.length < 100) {
             throw new Error('CSV data appears to be too short/invalid');
         }
-        
+
         const newData = parseCSVToLeaderboard(csvText);
-        
-        // Validate parsed data
+
         if (!newData || !Array.isArray(newData.participants)) {
             throw new Error('Invalid data structure from CSV parsing');
         }
-        
-        // Update global data only if we got valid results
-        if (newData.participants.length >= 0) { // Allow empty results
+
+        if (newData.participants.length >= 0) {
             allData = newData.participants;
             reviewsData = newData.reviews || [];
             lastSuccessfulFetch = Date.now();
-            
             console.log('✓ Successfully updated:', allData.length, 'participants,', reviewsData.length, 'reviews');
         }
-        
+
         return { participants: allData, reviews: reviewsData };
-        
+
     } catch (error) {
         console.error('❌ Failed to fetch updates:', error);
-        
-        // Only fall back to sample data if we have no existing data
+
+        // Commented out fallback to sample data
+        /*
         if (allData.length === 0 && lastSuccessfulFetch === null) {
             console.log('📋 Using sample data as initial fallback');
             allData = sampleData;
@@ -331,19 +302,16 @@ export async function fetchLatestData() {
         } else {
             console.log('📋 Keeping existing data due to fetch error');
         }
-        
+        */
+        console.log('📋 Keeping existing data due to fetch error');
         return { participants: allData, reviews: reviewsData };
     }
 }
 
-/**
- * Start polling for updates
- */
 export function startPolling(onUpdate) {
     console.log('=== STARTPOLLING CALLED ===');
     let hasInitialData = false;
-    
-    // Initial fetch with retry
+
     const initialFetch = async (retryCount = 0) => {
         try {
             const data = await fetchLatestData();
@@ -356,17 +324,16 @@ export function startPolling(onUpdate) {
                 console.log(`🔄 Retrying initial fetch (attempt ${retryCount + 1}/3)...`);
                 setTimeout(() => initialFetch(retryCount + 1), 2000 * (retryCount + 1));
             } else {
-                console.log('💥 All retry attempts failed, using fallback data');
-                const fallbackData = await fetchLatestData();
-                onUpdate(fallbackData);
+                console.log('💥 All retry attempts failed, no fallback');
+                // const fallbackData = await fetchLatestData();
+                // onUpdate(fallbackData);
                 hasInitialData = true;
             }
         }
     };
-    
+
     initialFetch();
-    
-    // Only set up polling if we have a configured URL
+
     if (CONFIG.SHEET_CSV_URL) {
         setInterval(async () => {
             if (!document.hidden && hasInitialData) {
@@ -381,20 +348,11 @@ export function startPolling(onUpdate) {
     }
 }
 
-/**
- * Update global data arrays
- */
 export function setData(participants, reviews) {
     allData = participants;
     reviewsData = reviews;
 }
 
-/**
- * Get current data
- */
 export function getData() {
     return { participants: allData, reviews: reviewsData };
 }
-
-
-

@@ -69,7 +69,7 @@ function getReviewCoverUrl(review) {
     }
     return '';
 }
-}
+
 
 /**
  * Render the reviews section
@@ -186,6 +186,7 @@ export function showStats() {
         statsBox.style.transform = 'translateY(0)';
     }
 }
+
 
 
 

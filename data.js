@@ -126,7 +126,7 @@ let lastSuccessfulFetch = null; // Track when we last got real data
  * Function to expand truncated challenge text for display
  */
 
-/*
+
 export function expandChallenge(challengeText) {
     if (!challengeText) return challengeText;
     
@@ -147,9 +147,9 @@ export function expandChallenge(challengeText) {
         return `Read a ${challengeText.toLowerCase()}`;
     }
     
-    return `Read a book ${challengeText.toLowerCase()}`;
+    return `${challengeText.toLowerCase()}`;
 }
-*/
+
 
 /**
  * Helper function to parse CSV row (handles commas in quotes)
@@ -431,6 +431,7 @@ function onUpdate(data) {
     // ... rest of your onUpdate code
 
 }
+
 
 
 

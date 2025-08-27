@@ -57,10 +57,13 @@ if (data.length === 0) {
 }
 
 /**
- * Render the reviews section
- export function renderReviews(reviews = sampleReviewsData) {
-    console.log('=== REVIEWS COVER DEBUG ===');
-    console.log('Total reviews:', reviews.length);
+// ALSO, update your renderReviews function in ui.js to add debug logging:
+
+export function renderReviews(reviews = sampleReviewsData) {
+    console.log('=== RENDER REVIEWS DEBUG ===');
+    console.log('Reviews received:', reviews);
+    console.log('Number of reviews:', reviews.length);
+    console.log('Sample review:', reviews[0]);
     
     const sidebarColumn = document.querySelector('.sidebar-column .s-lib-box-content');
     
@@ -72,42 +75,18 @@ if (data.length === 0) {
     const reviewsHTML = `
         <h3 class="reviews-header">Reviews!</h3>
         ${reviews.map((review, index) => {
-            console.log(`\n--- Review ${index}: ${review.title} ---`);
-            console.log('review.coverURL:', review.coverURL);
-            console.log('review.olid:', review.olid);
-            console.log('review.isbn:', review.isbn);
+            // Use the EXACT same cover logic as the carousel
+            const coverUrl = review.coverURL || (review.olid ? 
+                `https://covers.openlibrary.org/b/olid/${escapeHtml(review.olid)}-M.jpg` : 
+                'https://via.placeholder.com/150x200/6366f1/white?text=No+Cover'
+            );
             
-            let coverUrl;
-            let debugSource = '';
-            
-            // Method 1: Use stored coverURL directly
-            if (review.coverURL && review.coverURL.startsWith('http')) {
-                coverUrl = review.coverURL;
-                debugSource = 'stored coverURL';
-            }
-            // Method 2: Construct from olid/id
-            else if (review.olid) {
-                if (/^\d+$/.test(review.olid)) {
-                    coverUrl = `https://covers.openlibrary.org/b/id/${review.olid}-M.jpg`;
-                    debugSource = 'constructed from ID';
-                } else {
-                    coverUrl = `https://covers.openlibrary.org/b/olid/${review.olid}-M.jpg`;
-                    debugSource = 'constructed from OLID';
-                }
-            }
-            // Method 3: Try ISBN fallback
-            else if (review.isbn) {
-                coverUrl = `https://covers.openlibrary.org/b/isbn/${review.isbn}-M.jpg`;
-                debugSource = 'constructed from ISBN';
-            }
-            // Method 4: Placeholder
-            else {
-                coverUrl = 'https://via.placeholder.com/150x200/6366f1/white?text=No+Cover';
-                debugSource = 'placeholder';
-            }
-            
-            console.log('Final coverUrl:', coverUrl);
-            console.log('Source:', debugSource);
+            console.log(`Review ${index}:`, {
+                title: review.title,
+                olid: review.olid,
+                coverURL: review.coverURL,
+                finalCoverUrl: coverUrl
+            });
             
             return `
                 <article class="book-item">
@@ -115,7 +94,7 @@ if (data.length === 0) {
                          alt="Book cover for ${escapeHtml(review.title)}" 
                          class="book-cover"
                          loading="lazy"
-                         onerror="console.error('Image load failed for ${review.title}:', this.src); this.src='https://via.placeholder.com/150x200/6366f1/white?text=No+Cover'">
+                         onerror="this.src='https://via.placeholder.com/150x200/6366f1/white?text=No+Cover'; console.log('Image error for: ${escapeHtml(review.title)}')">
                     <div class="book-info">
                         <h4 class="book-title">${escapeHtml(review.title)}</h4>
                         <p class="book-author">by ${escapeHtml(review.author)}</p>
@@ -126,6 +105,7 @@ if (data.length === 0) {
         }).join('')}
     `;
     
+    console.log('Generated HTML:', reviewsHTML);
     sidebarColumn.innerHTML = reviewsHTML;
 }
 
@@ -191,5 +171,6 @@ export function animateNumber(elementId, targetValue) {
     
     requestAnimationFrame(animate);
 }
+
 
 

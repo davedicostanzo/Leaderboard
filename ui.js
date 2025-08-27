@@ -60,6 +60,7 @@ if (data.length === 0) {
 // ALSO, update your renderReviews function in ui.js to add debug logging:
 
 export function renderReviews(reviews = sampleReviewsData) {
+    console.log('renderReviews called with:', reviews);
     console.log('=== RENDER REVIEWS DEBUG ===');
     console.log('Reviews received:', reviews);
     console.log('Number of reviews:', reviews.length);
@@ -171,6 +172,7 @@ export function animateNumber(elementId, targetValue) {
     
     requestAnimationFrame(animate);
 }
+
 
 
 

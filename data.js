@@ -131,7 +131,7 @@ export function expandChallenge(challengeText) {
     if (!challengeText) return challengeText;
     
     // Add back the "Read a book" or "Read a" prefix for full context
-    let expanded = challengeText.toLowerCase();
+    /*let expanded = challengeText.toLowerCase();
     
     // Handle special cases first
     if (expanded === 'memoir' || expanded === 'mystery or thriller' || expanded === 'graphic novel or comic') {
@@ -147,7 +147,7 @@ export function expandChallenge(challengeText) {
         return `${challengeText.toLowerCase()}`;
     }
     
-    return `${challengeText.toLowerCase()}`;
+    return `${challengeText.toLowerCase()}`;*/
 }
 
 
@@ -431,6 +431,7 @@ function onUpdate(data) {
     // ... rest of your onUpdate code
 
 }
+
 
 
 

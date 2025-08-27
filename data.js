@@ -55,43 +55,6 @@ export const sampleData = [
             { title: "Circe", olid: "OL26430527M", challenge: "Read a book that is a mythological retelling" },
             { title: "The Song of Achilles", olid: "OL25152344M", challenge: "Read a book that has LGBTQ+ themes" }
         ]
-    },
-    { 
-        name: "David L.", 
-        booksRead: 2, 
-        books: [
-            { title: "Project Hail Mary", olid: "OL32338681M", challenge: "Read a book that is Science fiction" },
-            { title: "The Thursday Murder Club", olid: "OL28088070M", challenge: "Read a book that is a cozy mystery" }
-        ]
-    },
-    { 
-        name: "Lisa P.", 
-        booksRead: 2, 
-        books: [
-            { title: "Beach Read", olid: "OL27958934M", challenge: "Read a book that is a Romance novel" },
-            { title: "The Dutch House", olid: "OL27312320M", challenge: "Read a book about a family saga" }
-        ]
-    },
-    { 
-        name: "Alex T.", 
-        booksRead: 1, 
-        books: [
-            { title: "The Silent Patient", olid: "OL27958952M", challenge: "Read a book that is psychologically thrilling" }
-        ]
-    },
-    { 
-        name: "Kate J.", 
-        booksRead: 1, 
-        books: [
-            { title: "Normal People", olid: "OL26431710M", challenge: "Read a book that is a coming of age story" }
-        ]
-    },
-    { 
-        name: "Robert S.", 
-        booksRead: 1, 
-        books: [
-            { title: "The Vanishing Half", olid: "OL28088026M", challenge: "Read a book that is historical fiction" }
-        ]
     }
 ];
 
@@ -120,17 +83,15 @@ export const sampleReviewsData = [
 // Global data storage
 export let allData = [];
 export let reviewsData = [];
-let lastSuccessfulFetch = null; // Track when we last got real data
+let lastSuccessfulFetch = null;
 
 /**
  * Function to expand truncated challenge text for display
  */
-
-
 export function expandChallenge(challengeText) {
     if (!challengeText) return challengeText;
     
-    // Keep the original text (don’t force lowercase)
+    // Keep the original text (don't force lowercase)
     let expanded = challengeText;
 
     // Handle special cases first
@@ -149,7 +110,6 @@ export function expandChallenge(challengeText) {
 
     return expanded;
 }
-
 
 /**
  * Helper function to parse CSV row (handles commas in quotes)
@@ -200,6 +160,11 @@ export function extractOLIDFromCoverURL(coverURL) {
             return match[1];
         }
     }
+    
+    // If no pattern matches, return a default placeholder
+    console.log('No ID/OLID found, using default');
+    return 'OL12345678M';
+}
 
 /**
  * Helper function to extract ISBN from cover URL (if available)
@@ -217,65 +182,34 @@ export function extractISBNFromCoverURL(coverURL) {
  * Function to parse CSV data from Google Sheets
  */
 export function parseCSVToLeaderboard(csvText) {
+    console.log('=== DATA PARSING START ===');
+    console.log('CSV length:', csvText.length);
+    
     const lines = csvText.trim().split('\n');
     const headers = lines[0].split(',');
-// Add this comprehensive debug code to your data.js parseCSVToLeaderboard function
-// Add it right at the beginning, after const headers = lines[0].split(',');
-
-console.log('=== PARSING DEBUG START ===');
-console.log('Total CSV lines:', lines.length);
-console.log('Sample data line:', lines[1]); // Show raw CSV line
-
-// Then add this in your main parsing loop, right before the reviews.push section:
-
-console.log('=== ROW PROCESSING DEBUG ===');
-console.log('Row data:', row);
-console.log('Is Published:', isPublished);
-console.log('Stars:', stars);
-console.log('Review text:', review);
-console.log('Book Title:', bookTitle);
-console.log('Author:', author);
-console.log('Cover URL (raw):', coverURL);
-
-/ Add to reviews if 4+ stars and has review text
-        if (stars >= 4 && review && review.trim()) {
-            console.log('=== CREATING REVIEW ===');
-            console.log('Title:', bookTitle);
-            console.log('Raw coverURL from CSV:', coverURL);
-            console.log('Extracted bookOLID:', bookOLID);
-            console.log('Final finalCoverURL:', finalCoverURL);
-            
-            reviews.push({
-                title: bookTitle,
-                author: author,
-                olid: bookOLID,  
-                isbn: extractISBNFromCoverURL(coverURL),
-                description: `${review.trim()} - ${stars} Stars from ${name}`,
-                coverURL: finalCoverURL  // This should be your working /id/ URL
-            });
-
-// And add this at the very end of parseCSVToLeaderboard, before the return statement:
-
-console.log('=== FINAL RESULTS ===');
-console.log('Total participants:', Object.values(participants).length);
-console.log('Total reviews:', reviews.length);
-console.log('Reviews data:', reviews);
-console.log('Sample review:', reviews[0]);
-console.log('=== DEBUG END ===');
-
-
+    
+    console.log('Headers found:', headers);
+    console.log('Total lines:', lines.length);
+    
     const participants = {};
     const reviews = [];
 
     for (let i = 1; i < lines.length; i++) {
         const row = parseCSVRow(lines[i]);
+        
+        // Check if row has enough columns
+        if (row.length < 13) {
+            console.log(`Skipping row ${i}: insufficient columns (${row.length})`);
+            continue;
+        }
 
-        // Only process entries marked for publication (Column M - index 12)
-        const isPublished = row[12] && row[12].toString().toUpperCase() === 'TRUE';
-        if (!isPublished) continue;
-
+        // Column mapping based on your Google Apps Script:
+        // A=0: Timestamp, B=1: Email, C=2: Name, D=3: Challenge, E=4: Title, 
+        // F=5: Author, G=6: Stars, H=7: Review, I=8: CoverURL, J=9: CatalogURL, 
+        // K=10: Status, L=11: Verification Status, M=12: Publish Flag
+        
         const email = row[1];
-        const name = row[2];
+        const name = row[2]; 
         const challengeText = row[3];
         const bookTitle = row[4];
         const author = row[5];
@@ -284,6 +218,20 @@ console.log('=== DEBUG END ===');
         const coverURL = row[8];
         const catalogURL = row[9];
         const status = row[10];
+        const publishFlag = row[12]; // Column M
+
+        // Only process entries marked for publication
+        const isPublished = publishFlag && publishFlag.toString().toUpperCase() === 'TRUE';
+        
+        if (!isPublished) {
+            continue;
+        }
+
+        // Validate required fields
+        if (!email || !name || !bookTitle) {
+            console.log(`Skipping row ${i}: missing required fields`);
+            continue;
+        }
 
         if (!participants[email]) {
             participants[email] = {
@@ -297,7 +245,7 @@ console.log('=== DEBUG END ===');
         participants[email].booksRead++;
 
         // Extract OLID and ensure a usable coverURL
-        const bookOLID = extractOLIDFromCoverURL(coverURL);
+        const bookOLID = extractOLIDFromCoverURL(coverURL) || 'OL12345678M';
         const finalCoverURL = coverURL && coverURL.startsWith('http')
             ? coverURL
             : `https://covers.openlibrary.org/b/olid/${bookOLID}-M.jpg`;
@@ -310,18 +258,22 @@ console.log('=== DEBUG END ===');
             catalogURL: catalogURL && catalogURL.startsWith('http') ? catalogURL : null
         });
 
-// Add to reviews if 4+ stars and has review text
-if (stars >= 4 && review && review.trim()) {
-    reviews.push({
-        title: bookTitle,
-        author: author,
-        olid: bookOLID,  // ADD THIS - same olid as used in carousel
-        isbn: extractISBNFromCoverURL(coverURL),
-        description: `${review.trim()} - ${stars} Stars from ${name}`,
-        coverURL: finalCoverURL  // ADD THIS - same cover URL logic
-    });
-}
+        // Add to reviews if 4+ stars and has review text
+        if (stars >= 4 && review && review.trim()) {
+            reviews.push({
+                title: bookTitle,
+                author: author,
+                olid: bookOLID,
+                isbn: extractISBNFromCoverURL(coverURL),
+                description: `${review.trim()} - ${stars} Stars from ${name}`,
+                coverURL: finalCoverURL
+            });
+        }
     }
+
+    console.log('=== FINAL PARSING RESULTS ===');
+    console.log('Participants created:', Object.keys(participants).length);
+    console.log('Reviews created:', reviews.length);
 
     return {
         participants: Object.values(participants),
@@ -329,17 +281,12 @@ if (stars >= 4 && review && review.trim()) {
     };
 }
 
-
 /**
  * Function to fetch latest data from Google Sheets
  */
 export async function fetchLatestData() {
-    console.log('=== DEBUG CONFIG ===');
-    console.log('CONFIG:', CONFIG);
-    console.log('CONFIG.SHEET_CSV_URL:', CONFIG.SHEET_CSV_URL);
     if (!CONFIG.SHEET_CSV_URL) {
         console.log('Sheet CSV URL not configured, using sample data');
-        // Only use sample data if we have no real data yet
         if (allData.length === 0) {
             allData = sampleData;
             reviewsData = sampleReviewsData;
@@ -348,17 +295,20 @@ export async function fetchLatestData() {
     }
     
     try {
-        const hardcodedUrl = 'https://docs.google.com/spreadsheets/d/19lrKP2qffpZWjYkXfp4BVDs1wjkJc91OUD5Tw7acjI4/export?format=csv&gid=1299984813';
-console.log('Fetching data from hardcoded URL:', hardcodedUrl);
-        const response = await fetch(hardcodedUrl, {
-    cache: 'no-cache',  // Prevent caching without URL modification
-    headers: {
-        'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache'
-    }
-});
-        console.log('Response URL after fetch:', response.url);
-console.log('Response status:', response.status);
+        console.log('Fetching data from:', CONFIG.SHEET_CSV_URL);
+        
+        // Add cache-busting to prevent stale data
+        const cacheBustUrl = `${CONFIG.SHEET_CSV_URL}&cb=${Date.now()}`;
+        
+        const response = await fetch(cacheBustUrl, {
+            cache: 'no-cache',
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            }
+        });
+        
+        console.log('Response status:', response.status);
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -366,46 +316,33 @@ console.log('Response status:', response.status);
         
         const csvText = await response.text();
         console.log('CSV data length:', csvText.length);
-        console.log('First 200 chars:', csvText.substring(0, 200));
-        console.log('CSV text preview:', csvText);
-
-        console.log('About to call parseCSVToLeaderboard with CSV of length:', csvText.length);
-        const newData = parseCSVToLeaderboard(csvText);
-
-        console.log('=== PARSING DEBUG ===');
-        console.log('Raw CSV lines:', csvText.split('\n').length);
-        console.log('Parsed participants:', newData.participants.length);
-        console.log('Parsed reviews:', newData.reviews.length);
-        console.log('First parsed participant:', newData.participants[0]);
         
-        // Only update if we got valid data (at least some participants or this is our first successful fetch)
-        if (newData.participants.length > 0 || lastSuccessfulFetch === null) {
-            // Update global data
+        if (csvText.length < 100) { // Sanity check for minimal CSV size
+            throw new Error('CSV data appears to be too short/invalid');
+        }
+        
+        const newData = parseCSVToLeaderboard(csvText);
+        
+        // Validate parsed data
+        if (!newData || !Array.isArray(newData.participants)) {
+            throw new Error('Invalid data structure from CSV parsing');
+        }
+        
+        // Update global data only if we got valid results
+        if (newData.participants.length >= 0) { // Allow empty results
             allData = newData.participants;
-            reviewsData = newData.reviews;
+            reviewsData = newData.reviews || [];
             lastSuccessfulFetch = Date.now();
             
             console.log('✓ Successfully updated:', allData.length, 'participants,', reviewsData.length, 'reviews');
-            console.log('Raw parsed data length:', newData.participants.length);
-            console.log('Sample parsed row:', newData.participants[0]);
-            console.log('Participants:', allData);
-            console.log('Participants:', allData.map(p => `${p.name}: ${p.booksRead} books`));
-        } else {
-            console.log('⚠️ Received empty data, keeping existing data');
         }
         
         return { participants: allData, reviews: reviewsData };
         
     } catch (error) {
         console.error('❌ Failed to fetch updates:', error);
-        console.error('Error details:', {
-            message: error.message,
-            stack: error.stack
-        });
         
-        // Only fall back to sample data if:
-        // 1. We have no existing real data AND
-        // 2. We've never successfully fetched before
+        // Only fall back to sample data if we have no existing data
         if (allData.length === 0 && lastSuccessfulFetch === null) {
             console.log('📋 Using sample data as initial fallback');
             allData = sampleData;
@@ -423,7 +360,6 @@ console.log('Response status:', response.status);
  */
 export function startPolling(onUpdate) {
     console.log('=== STARTPOLLING CALLED ===');
-    console.log('onUpdate function:', onUpdate);
     let hasInitialData = false;
     
     // Initial fetch with retry
@@ -437,10 +373,10 @@ export function startPolling(onUpdate) {
             console.error('❌ Initial fetch failed:', error);
             if (retryCount < 3) {
                 console.log(`🔄 Retrying initial fetch (attempt ${retryCount + 1}/3)...`);
-                setTimeout(() => initialFetch(retryCount + 1), 2000 * (retryCount + 1)); // Exponential backoff
+                setTimeout(() => initialFetch(retryCount + 1), 2000 * (retryCount + 1));
             } else {
                 console.log('💥 All retry attempts failed, using fallback data');
-                const fallbackData = await fetchLatestData(); // This will use fallback logic
+                const fallbackData = await fetchLatestData();
                 onUpdate(fallbackData);
                 hasInitialData = true;
             }
@@ -452,14 +388,12 @@ export function startPolling(onUpdate) {
     // Only set up polling if we have a configured URL
     if (CONFIG.SHEET_CSV_URL) {
         setInterval(async () => {
-            // Only poll when page is visible and we have initial data
             if (!document.hidden && hasInitialData) {
                 try {
                     const data = await fetchLatestData();
                     onUpdate(data);
                 } catch (error) {
                     console.warn('⚠️ Polling update failed, keeping existing data:', error.message);
-                    // Don't call onUpdate if polling fails - keep existing UI
                 }
             }
         }, CONFIG.POLL_INTERVAL);
@@ -480,47 +414,3 @@ export function setData(participants, reviews) {
 export function getData() {
     return { participants: allData, reviews: reviewsData };
 }
-
-function onUpdate(data) {
-    console.log('=== DATA RECEIVED ===');
-    console.log('Participants:', data.participants?.length || 0);
-    console.log('Reviews:', data.reviews?.length || 0);
-    console.log('First participant:', data.participants?.[0]);
-    // ... rest of your onUpdate code
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

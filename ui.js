@@ -89,6 +89,7 @@ export function renderReviews(reviews = sampleReviewsData) {
             // For sample data, use the Syndetics service with ISBN
             let coverUrl = '';
             if (review.isbn && !review.coverURL) {
+                console.log(review);
                 // This is sample data - use Syndetics
                 coverUrl = `//syndetics.com/index.aspx?isbn=${review.isbn}/LC.GIF&client=springshare`;
             } else {
@@ -184,4 +185,5 @@ export function showStats() {
         statsBox.style.transform = 'translateY(0)';
     }
 }
+
 

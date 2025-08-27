@@ -187,56 +187,31 @@ export function parseCSVToLeaderboard(csvText) {
     const headers = lines[0].split(',');
     console.log('Total lines:', lines.length);
     console.log('Headers:', headers);
-    
-         
+
     const participants = {};
     const reviews = [];
 
     for (let i = 1; i < lines.length; i++) {
         const row = parseCSVRow(lines[i]);
-        console.log(`Row ${i}:`, row); // Add this line
-    
-    // Only process entries marked for publication (Column L - index 11)
-    const isPublished = row[11] && row[11].toString().toUpperCase() === 'TRUE';
-    console.log(`Row ${i} published:`, isPublished); // Add this line
-    
-    if (!isPublished) continue;
-        
-        // Check if row has enough columns
-        if (row.length < 13) {
-            console.log(`Skipping row ${i}: insufficient columns (${row.length})`);
-            continue;
-        }
+        console.log(`Row ${i}:`, row);
 
-        // Column mapping based on your Google Apps Script:
-        // A=0: Timestamp, B=1: Email, C=2: Name, D=3: Challenge, E=4: Title, 
-        // F=5: Author, G=6: Stars, H=7: Review, I=8: CoverURL, J=9: CatalogURL, 
-        // K=10: Status, L=11: Verification Status, M=12: Publish Flag
-        
+        // Column mapping:
+        // 0=Timestamp, 1=Email, 2=Name, 3=Challenge, 4=Title, 5=Author
+        // 6=Stars, 7=Review, 8=CoverURL, 9=CatalogURL, 10=Status, 11=Verification Status, 12=Publish Flag
+        if (!row[12] || row[12].toUpperCase() !== 'TRUE') continue; // Only published
+
         const email = row[1];
-        const name = row[2]; 
+        const name = row[2];
         const challengeText = row[3];
         const bookTitle = row[4];
         const author = row[5];
         const stars = parseInt(row[6]) || 0;
-        const review = row[7];
-        const coverURL = row[8];
+        const reviewText = row[7];
+        const rawCoverURL = row[8];
         const catalogURL = row[9];
         const status = row[10];
-        const publishFlag = row[12]; // Column M
 
-        // Only process entries marked for publication
-        const isPublished = publishFlag && publishFlag.toString().toUpperCase() === 'TRUE';
-        
-        if (!isPublished) {
-            continue;
-        }
-
-        // Validate required fields
-        if (!email || !name || !bookTitle) {
-            console.log(`Skipping row ${i}: missing required fields`);
-            continue;
-        }
+        if (!email || !name || !bookTitle) continue;
 
         if (!participants[email]) {
             participants[email] = {
@@ -249,10 +224,11 @@ export function parseCSVToLeaderboard(csvText) {
 
         participants[email].booksRead++;
 
-        // Extract OLID and ensure a usable coverURL
-        const bookOLID = extractOLIDFromCoverURL(coverURL) || 'OL12345678M';
-        const finalCoverURL = coverURL && coverURL.startsWith('http')
-            ? coverURL
+        // Always generate a valid coverURL
+        let bookOLID = extractOLIDFromCoverURL(rawCoverURL);
+        if (!bookOLID) bookOLID = 'OL12345678M'; // fallback OLID
+        const finalCoverURL = rawCoverURL && rawCoverURL.startsWith('http')
+            ? rawCoverURL
             : `https://covers.openlibrary.org/b/olid/${bookOLID}-M.jpg`;
 
         participants[email].books.push({
@@ -263,21 +239,13 @@ export function parseCSVToLeaderboard(csvText) {
             catalogURL: catalogURL && catalogURL.startsWith('http') ? catalogURL : null
         });
 
-        // Add to reviews if 4+ stars and has review text
-        if (stars >= 4 && review && review.trim()) {
-            console.log('Adding review:', {
-            title: bookTitle,
-            author: author,
-            stars: stars,
-            review: review,
-            coverURL: coverURL
-    });
+        if (stars >= 4 && reviewText && reviewText.trim()) {
             reviews.push({
                 title: bookTitle,
                 author: author,
                 olid: bookOLID,
-                isbn: extractISBNFromCoverURL(coverURL),
-                description: `${review.trim()} - ${stars} Stars from ${name}`,
+                isbn: extractISBNFromCoverURL(rawCoverURL),
+                description: `${reviewText.trim()} - ${stars} Stars from ${name}`,
                 coverURL: finalCoverURL
             });
         }
@@ -292,6 +260,7 @@ export function parseCSVToLeaderboard(csvText) {
         reviews: reviews
     };
 }
+
 
 /**
  * Function to fetch latest data from Google Sheets
@@ -426,5 +395,6 @@ export function setData(participants, reviews) {
 export function getData() {
     return { participants: allData, reviews: reviewsData };
 }
+
 
 

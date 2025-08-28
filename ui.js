@@ -1,111 +1,8 @@
-// UPDATED ui.js - Fixed cover URL logic for reviews
+// ui.js - UI rendering and DOM manipulation
 
 import { escapeHtml } from './utils.js';
 import { generateBookCarousel } from './carousel.js';
-
-/**
- * Get cover URL for review book - FIXED VERSION
- */
-function getReviewCoverUrl(review) {
-    console.log('Processing review cover for:', review.title);
-    console.log('- coverURL:', review.coverURL);
-    console.log('- olid:', review.olid);
-    console.log('- isbn:', review.isbn);
-    
-    // Check if coverURL exists and looks like a valid URL
-    if (review.coverURL && 
-        review.coverURL.trim() !== '' && 
-        review.coverURL.startsWith('http') &&
-        // More lenient error checking - only exclude obvious errors
-        !review.coverURL.toLowerCase().includes('error') &&
-        !review.coverURL.toLowerCase().includes('failed') &&
-        review.coverURL !== 'No Cover Available' &&
-        review.coverURL !== 'Not Found' &&
-        review.coverURL !== 'Fetch Error') {
-        
-        console.log('✓ Using provided coverURL:', review.coverURL);
-        return review.coverURL;
-    }
-    
-    // Fallback: construct from OLID if present
-    if (review.olid && review.olid.trim() !== '') {
-        const olidUrl = `https://covers.openlibrary.org/b/olid/${review.olid}-M.jpg`;
-        console.log('✓ Using OLID fallback:', olidUrl);
-        return olidUrl;
-    }
-    
-    // Fallback: construct from ISBN if present
-    if (review.isbn && review.isbn.trim() !== '') {
-        const isbnUrl = `https://covers.openlibrary.org/b/isbn/${review.isbn}-M.jpg`;
-        console.log('✓ Using ISBN fallback:', isbnUrl);
-        return isbnUrl;
-    }
-    
-    console.log('✗ No valid cover source found');
-    return '';
-}
-
-/**
- * Render the reviews section - UPDATED
- */
-export function renderReviews(reviews) {
-    const sidebarColumn = document.querySelector('.sidebar-column .s-lib-box-content');
-    
-    if (!sidebarColumn) {
-        console.error('Reviews container not found');
-        return;
-    }
-
-    console.log('=== RENDERING REVIEWS ===');
-    console.log('Number of reviews:', reviews ? reviews.length : 0);
-
-    if (!reviews || reviews.length === 0) {
-        sidebarColumn.innerHTML = '<h3 class="reviews-header">Reviews!</h3><p>No reviews available yet.</p>';
-        return;
-    }
-
-    const reviewsHTML = `
-      <h3 class="reviews-header">Reviews!</h3>
-      ${reviews.map((review, index) => {
-        console.log(`\n--- Review ${index + 1} ---`);
-        console.log(`Title: "${review.title}"`);
-        console.log(`Author: "${review.author}"`);
-        console.log(`Raw coverURL: "${review.coverURL}"`);
-        console.log(`OLID: "${review.olid}"`);
-        console.log(`ISBN: "${review.isbn}"`);
-
-        // Get cover URL with detailed logging
-        const coverUrl = getReviewCoverUrl(review);
-        console.log(`Final cover URL: "${coverUrl}"`);
-
-        return `
-          <article class="book-item">
-            ${coverUrl ? `
-              <img src="${coverUrl}" 
-                   alt="Book cover for ${escapeHtml(review.title)}" 
-                   class="book-cover"
-                   loading="lazy"
-                   onload="console.log('✓ Cover loaded successfully:', '${escapeHtml(review.title)}')"
-                   onerror="console.log('✗ Cover failed to load:', '${escapeHtml(review.title)}', this.src); this.style.display='none';">
-            ` : `
-              <div class="book-cover-placeholder" 
-                   style="width: 50px; height: 70px; background: #f5f5f5; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #999; margin-right: 8px; flex-shrink: 0;">
-                No Cover
-              </div>
-            `}
-            <div class="book-info">
-              <h4 class="book-title">${escapeHtml(review.title)}</h4>
-              <p class="book-author">by ${escapeHtml(review.author)}</p>
-              <p class="book-description">${escapeHtml(review.description)}</p>
-            </div>
-          </article>
-        `;
-      }).join('')}
-    `;
-
-    sidebarColumn.innerHTML = reviewsHTML;
-    console.log('=== REVIEWS RENDERED ===');
-}
+// import { sampleReviewsData } from './data.js'; // Sample data import commented out
 
 /**
  * Render the main leaderboard
@@ -155,6 +52,87 @@ export function renderLeaderboard(data, onRenderComplete) {
         onRenderComplete(sortedData);
     }
 }
+
+/**
+ * Get cover URL for review book - use the same logic as the carousel
+ */
+
+function getReviewCoverUrl(review) {
+    console.log('Getting cover URL for:', review.title, 'coverURL:', review.coverURL);
+    
+    // Use the same logic as carousels - if coverURL exists and is a valid URL, use it
+    if (review.coverURL && review.coverURL.startsWith('http')) {
+        console.log('Using direct coverURL:', review.coverURL);
+        return review.coverURL;
+    }
+    
+    // Fallback to OLID construction (same as carousel fallback)
+    if (review.olid) {
+        const fallbackUrl = `https://covers.openlibrary.org/b/olid/${review.olid}-M.jpg`;
+        console.log('Using OLID fallback:', fallbackUrl);
+        return fallbackUrl;
+    }
+    
+    console.log('No valid cover URL found for:', review.title);
+    return '';
+}
+
+
+/**
+ * Render the reviews section
+ */
+// export function renderReviews(reviews = sampleReviewsData) { // Default to sample data commented out
+// Replace the entire renderReviews function in ui.js with this:
+
+export function renderReviews(reviews) {
+    const sidebarColumn = document.querySelector('.sidebar-column .s-lib-box-content');
+    
+    if (!sidebarColumn) {
+        console.error('Reviews container not found');
+        return;
+    }
+
+    console.log('=== RENDERING REVIEWS ===');
+    console.log('Reviews array:', reviews);
+    
+    if (!reviews || reviews.length === 0) {
+        console.log('No reviews to display');
+        sidebarColumn.innerHTML = '<h3 class="reviews-header">Reviews!</h3><p>No reviews yet.</p>';
+        return;
+    }
+
+    const reviewsHTML = `
+      <h3 class="reviews-header">Reviews!</h3>
+      ${reviews.map((review, index) => {
+        console.log(`Rendering review ${index}:`, review);
+        
+        // EXACTLY the same as carousel
+        const coverUrl = review.coverURL || `https://covers.openlibrary.org/b/olid/${review.olid}-M.jpg`;
+        console.log(`Cover URL for "${review.title}":`, coverUrl);
+        
+        return `
+          <article class="book-item">
+            <img src="${coverUrl}" 
+                 alt="Cover of ${escapeHtml(review.title)}" 
+                 class="book-cover" 
+                 loading="lazy"
+                 onerror="console.log('Image error for:', '${escapeHtml(review.title)}'); handleImageError(this, '${escapeHtml(review.title)}')">
+            <div class="book-info">
+              <h4 class="book-title">${escapeHtml(review.title)}</h4>
+              <p class="book-author">by ${escapeHtml(review.author)}</p>
+              <p class="book-description">${escapeHtml(review.description)}</p>
+            </div>
+          </article>
+        `;
+      }).join('')}
+    `;
+
+    sidebarColumn.innerHTML = reviewsHTML;
+    
+    console.log('Reviews HTML generated');
+}
+
+// Remove the getReviewCoverUrl function entirely - we don't need it anymore!
 
 /**
  * Update statistics display
@@ -215,3 +193,6 @@ export function showStats() {
         statsBox.style.transform = 'translateY(0)';
     }
 }
+
+
+

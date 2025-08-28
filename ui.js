@@ -56,17 +56,24 @@ export function renderLeaderboard(data, onRenderComplete) {
 /**
  * Get cover URL for review book - use the same logic as the carousel
  */
+
 function getReviewCoverUrl(review) {
-    if (review.coverURL && review.coverURL.startsWith('http') &&
-        !review.coverURL.includes('No Cover Available') &&
-        !review.coverURL.includes('Not Found') &&
-        !review.coverURL.includes('Fetch Error')) {
+    console.log('Getting cover URL for:', review.title, 'coverURL:', review.coverURL);
+    
+    // Use the same logic as carousels - if coverURL exists and is a valid URL, use it
+    if (review.coverURL && review.coverURL.startsWith('http')) {
+        console.log('Using direct coverURL:', review.coverURL);
         return review.coverURL;
     }
-    // fallback: construct from OLID if present
+    
+    // Fallback to OLID construction (same as carousel fallback)
     if (review.olid) {
-        return `https://covers.openlibrary.org/b/olid/${review.olid}-M.jpg`;
+        const fallbackUrl = `https://covers.openlibrary.org/b/olid/${review.olid}-M.jpg`;
+        console.log('Using OLID fallback:', fallbackUrl);
+        return fallbackUrl;
     }
+    
+    console.log('No valid cover URL found for:', review.title);
     return '';
 }
 
@@ -183,4 +190,5 @@ export function showStats() {
         statsBox.style.transform = 'translateY(0)';
     }
 }
+
 

@@ -92,13 +92,23 @@ export function renderReviews(reviews) {
         return;
     }
 
-    console.log('Rendering reviews:', reviews.length, 'reviews');
+    console.log('=== RENDERING REVIEWS ===');
+    console.log('Reviews array:', reviews);
+    
+    if (!reviews || reviews.length === 0) {
+        console.log('No reviews to display');
+        sidebarColumn.innerHTML = '<h3 class="reviews-header">Reviews!</h3><p>No reviews yet.</p>';
+        return;
+    }
 
     const reviewsHTML = `
       <h3 class="reviews-header">Reviews!</h3>
       ${reviews.map((review, index) => {
-        // Use EXACTLY the same logic as carousel.js line 21-22
+        console.log(`Rendering review ${index}:`, review);
+        
+        // EXACTLY the same as carousel
         const coverUrl = review.coverURL || `https://covers.openlibrary.org/b/olid/${review.olid}-M.jpg`;
+        console.log(`Cover URL for "${review.title}":`, coverUrl);
         
         return `
           <article class="book-item">
@@ -106,7 +116,7 @@ export function renderReviews(reviews) {
                  alt="Cover of ${escapeHtml(review.title)}" 
                  class="book-cover" 
                  loading="lazy"
-                 onerror="handleImageError(this, '${escapeHtml(review.title)}')">
+                 onerror="console.log('Image error for:', '${escapeHtml(review.title)}'); handleImageError(this, '${escapeHtml(review.title)}')">
             <div class="book-info">
               <h4 class="book-title">${escapeHtml(review.title)}</h4>
               <p class="book-author">by ${escapeHtml(review.author)}</p>
@@ -118,6 +128,8 @@ export function renderReviews(reviews) {
     `;
 
     sidebarColumn.innerHTML = reviewsHTML;
+    
+    console.log('Reviews HTML generated');
 }
 
 // Remove the getReviewCoverUrl function entirely - we don't need it anymore!
@@ -181,6 +193,7 @@ export function showStats() {
         statsBox.style.transform = 'translateY(0)';
     }
 }
+
 
 
 

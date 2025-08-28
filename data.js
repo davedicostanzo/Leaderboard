@@ -326,7 +326,7 @@ export function startPolling(onUpdate) {
     console.log('=== STARTPOLLING CALLED ===');
     let hasInitialData = false;
 
-const initialFetch = async (retryCount = 0) => {
+    const initialFetch = async (retryCount = 0) => {
         try {
             console.log('=== CALLING fetchLatestData ===');
             const data = await fetchLatestData();
@@ -366,6 +366,7 @@ export function setData(participants, reviews) {
 export function getData() {
     return { participants: allData, reviews: reviewsData };
 }
+
 
 
 

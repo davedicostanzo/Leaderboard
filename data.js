@@ -313,7 +313,11 @@ export async function fetchLatestData() {
             console.log('📋 Keeping existing data due to fetch error');
         }
         */
-        console.log('📋 Keeping existing data due to fetch error');
+        console.log('=== ABOUT TO RETURN FROM fetchLatestData ===');
+        console.log('allData length:', allData.length);
+        console.log('reviewsData length:', reviewsData.length);
+        console.log('Returning object:', { participants: allData, reviews: reviewsData });
+        
         return { participants: allData, reviews: reviewsData };
     }
 }
@@ -322,23 +326,19 @@ export function startPolling(onUpdate) {
     console.log('=== STARTPOLLING CALLED ===');
     let hasInitialData = false;
 
-    const initialFetch = async (retryCount = 0) => {
+const initialFetch = async (retryCount = 0) => {
         try {
+            console.log('=== CALLING fetchLatestData ===');
             const data = await fetchLatestData();
+            console.log('=== RECEIVED DATA FROM fetchLatestData ===');
+            console.log('Data received:', data);
+            console.log('About to call onUpdate with:', data);
             onUpdate(data);
             hasInitialData = true;
             console.log('✅ Initial data loaded successfully');
         } catch (error) {
             console.error('❌ Initial fetch failed:', error);
-            if (retryCount < 3) {
-                console.log(`🔄 Retrying initial fetch (attempt ${retryCount + 1}/3)...`);
-                setTimeout(() => initialFetch(retryCount + 1), 2000 * (retryCount + 1));
-            } else {
-                console.log('💥 All retry attempts failed, no fallback');
-                // const fallbackData = await fetchLatestData();
-                // onUpdate(fallbackData);
-                hasInitialData = true;
-            }
+            // ... rest of error handling
         }
     };
 
@@ -366,5 +366,6 @@ export function setData(participants, reviews) {
 export function getData() {
     return { participants: allData, reviews: reviewsData };
 }
+
 
 

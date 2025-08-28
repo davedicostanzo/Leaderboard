@@ -83,49 +83,80 @@ function getReviewCoverUrl(review) {
  */
 
 export function renderReviews(reviews) {
-    window._reviews = reviews;
     console.log('=== renderReviews CALLED ===');
+    window._reviews = reviews; // expose globally for debugging
     console.log('Reviews received:', reviews);
     console.log('Number of reviews:', reviews ? reviews.length : 0);
-    
+
     const sidebarColumn = document.querySelector('.sidebar-column .s-lib-box-content');
-    
+
     if (!sidebarColumn) {
         console.error('Sidebar not found');
         return;
     }
 
+    // Clear existing content
+    sidebarColumn.innerHTML = '';
+
+    // Header
+    const header = document.createElement('h3');
+    header.className = 'reviews-header';
+    header.textContent = 'Reviews!';
+    sidebarColumn.appendChild(header);
+
     if (!reviews || reviews.length === 0) {
-        sidebarColumn.innerHTML = `
-            <h3 class="reviews-header">Reviews!</h3>
-            <p>No reviews available yet.</p>
-        `;
+        const p = document.createElement('p');
+        p.textContent = 'No reviews available yet.';
+        sidebarColumn.appendChild(p);
         return;
     }
 
-    // Use the same cover URLs that are working in the carousel
-    const reviewsHTML = `
-        <h3 class="reviews-header">Reviews!</h3>
-        ${reviews.map(review => `
-            <article class="book-item">
-                <img src="${review.coverURL || 'https://via.placeholder.com/60x80/8B4B6B/white?text=No+Cover'}" 
-                     alt="Book cover for ${escapeHtml(review.title)}" 
-                     class="book-cover"
-                     loading="lazy"
-                     onload="console.log('✅ Review image loaded:', this.src)"
-                     onerror="console.log('❌ Review image failed:', this.src); this.src='https://via.placeholder.com/60x80/8B4B6B/white?text=Error';">
-                <div class="book-info">
-                    <h4 class="book-title">${escapeHtml(review.title)}</h4>
-                    <p class="book-author">by ${escapeHtml(review.author)}</p>
-                    <p class="book-description">${escapeHtml(review.description)}</p>
-                </div>
-            </article>
-        `).join('')}
-    `;
-    
-    console.log('Setting reviews HTML...');
-    sidebarColumn.innerHTML = reviewsHTML;
+    // Loop through reviews and create elements
+    reviews.forEach(review => {
+        const article = document.createElement('article');
+        article.className = 'book-item';
+
+        const img = document.createElement('img');
+        img.className = 'book-cover';
+        img.alt = `Book cover for ${review.title}`;
+        img.src = review.coverURL || 'https://via.placeholder.com/60x80/8B4B6B/white?text=No+Cover';
+        img.loading = 'eager'; // force immediate load
+        img.style.display = 'block';
+        img.onerror = () => {
+            console.warn('❌ Review image failed:', img.src);
+            img.src = 'https://via.placeholder.com/60x80/8B4B6B/white?text=Error';
+        };
+        img.onload = () => console.log('✅ Review image loaded:', img.src);
+
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'book-info';
+
+        const titleEl = document.createElement('h4');
+        titleEl.className = 'book-title';
+        titleEl.textContent = review.title;
+
+        const authorEl = document.createElement('p');
+        authorEl.className = 'book-author';
+        authorEl.textContent = `by ${review.author}`;
+
+        const descEl = document.createElement('p');
+        descEl.className = 'book-description';
+        descEl.textContent = review.description;
+
+        // Assemble
+        infoDiv.appendChild(titleEl);
+        infoDiv.appendChild(authorEl);
+        infoDiv.appendChild(descEl);
+
+        article.appendChild(img);
+        article.appendChild(infoDiv);
+
+        sidebarColumn.appendChild(article);
+    });
+
+    console.log('✅ Reviews rendered successfully');
 }
+
 
 // Remove the getReviewCoverUrl function entirely - we don't need it anymore!
 
@@ -188,6 +219,7 @@ export function showStats() {
         statsBox.style.transform = 'translateY(0)';
     }
 }
+
 
 
 

@@ -81,12 +81,9 @@ function getReviewCoverUrl(review) {
 /**
  * Render the reviews section
  */
-// export function renderReviews(reviews = sampleReviewsData) { // Default to sample data commented out
-// Replace the entire renderReviews function in ui.js with this:
-
-// Replace your entire renderReviews function with this simple test version:
 
 export function renderReviews(reviews) {
+    window._reviews = reviews;
     console.log('=== renderReviews CALLED ===');
     console.log('Reviews received:', reviews);
     console.log('Number of reviews:', reviews ? reviews.length : 0);
@@ -191,6 +188,7 @@ export function showStats() {
         statsBox.style.transform = 'translateY(0)';
     }
 }
+
 
 
 

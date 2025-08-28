@@ -87,13 +87,9 @@ function getReviewCoverUrl(review) {
 // Replace your entire renderReviews function with this simple test version:
 
 export function renderReviews(reviews) {
-    console.log('=== SIMPLE REVIEW TEST ===');
+    console.log('=== renderReviews CALLED ===');
     console.log('Reviews received:', reviews);
     console.log('Number of reviews:', reviews ? reviews.length : 0);
-    
-    // Use sample data only if reviews is null/undefined, not if it's an empty array
-    const reviewsToRender = reviews || sampleReviewsData;
-    console.log('Using reviews:', reviewsToRender);
     
     const sidebarColumn = document.querySelector('.sidebar-column .s-lib-box-content');
     
@@ -102,7 +98,7 @@ export function renderReviews(reviews) {
         return;
     }
 
-    if (reviewsToRender.length === 0) {
+    if (!reviews || reviews.length === 0) {
         sidebarColumn.innerHTML = `
             <h3 class="reviews-header">Reviews!</h3>
             <p>No reviews available yet.</p>
@@ -110,37 +106,28 @@ export function renderReviews(reviews) {
         return;
     }
 
-    // Test with a known working image first
-    const testHTML = `
+    // Use the same cover URLs that are working in the carousel
+    const reviewsHTML = `
         <h3 class="reviews-header">Reviews!</h3>
-        <article class="book-item">
-            <img src="https://covers.openlibrary.org/b/id/798170-M.jpg" 
-                 alt="Test cover" 
-                 class="book-cover"
-                 onload="console.log('✅ Test image loaded successfully')"
-                 onerror="console.log('❌ Test image failed')">
-            <div class="book-info">
-                <h4 class="book-title">Test Book</h4>
-                <p class="book-author">Test Author</p>
-                <p class="book-description">This is a test to see if ANY image loads</p>
-            </div>
-        </article>
-        <article class="book-item">
-            <img src="${reviewsToRender[0].coverURL || 'MISSING'}" 
-                 alt="Real review cover" 
-                 class="book-cover"
-                 onload="console.log('✅ Real review image loaded:', this.src)"
-                 onerror="console.log('❌ Real review image failed:', this.src)">
-            <div class="book-info">
-                <h4 class="book-title">${escapeHtml(reviewsToRender[0].title || 'No title')}</h4>
-                <p class="book-author">${escapeHtml(reviewsToRender[0].author || 'No author')}</p>
-                <p class="book-description">${escapeHtml(reviewsToRender[0].description || 'No description')}</p>
-            </div>
-        </article>
+        ${reviews.map(review => `
+            <article class="book-item">
+                <img src="${review.coverURL || 'https://via.placeholder.com/60x80/8B4B6B/white?text=No+Cover'}" 
+                     alt="Book cover for ${escapeHtml(review.title)}" 
+                     class="book-cover"
+                     loading="lazy"
+                     onload="console.log('✅ Review image loaded:', this.src)"
+                     onerror="console.log('❌ Review image failed:', this.src); this.src='https://via.placeholder.com/60x80/8B4B6B/white?text=Error';">
+                <div class="book-info">
+                    <h4 class="book-title">${escapeHtml(review.title)}</h4>
+                    <p class="book-author">by ${escapeHtml(review.author)}</p>
+                    <p class="book-description">${escapeHtml(review.description)}</p>
+                </div>
+            </article>
+        `).join('')}
     `;
     
-    console.log('Setting HTML...');
-    sidebarColumn.innerHTML = testHTML;
+    console.log('Setting reviews HTML...');
+    sidebarColumn.innerHTML = reviewsHTML;
 }
 
 // Remove the getReviewCoverUrl function entirely - we don't need it anymore!
@@ -204,6 +191,7 @@ export function showStats() {
         statsBox.style.transform = 'translateY(0)';
     }
 }
+
 
 
 

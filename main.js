@@ -25,10 +25,10 @@ let currentData = { participants: [], reviews: [] };
  * Handle data updates from polling
  */
 function onDataUpdate(data) {
-    console.log('=== DATA UPDATE ===');
-    console.log('Participants:', data.participants.length);
-    console.log('Reviews:', data.reviews.length);
-    console.log('Sample review:', data.reviews[0]);
+    console.log('=== onDataUpdate CALLED ===');
+    console.log('Data received in onDataUpdate:', data);
+    console.log('Participants count:', data.participants?.length || 0);
+    console.log('Reviews count:', data.reviews?.length || 0);
     
     currentData = data;
     setData(data.participants, data.reviews);
@@ -127,6 +127,7 @@ if (document.readyState === 'loading') {
 // Export for potential external access
 
 export { initializeApp, onDataUpdate, currentData };
+
 
 
 

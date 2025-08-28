@@ -113,10 +113,14 @@ export function renderReviews(reviews) {
         return `
           <article class="book-item">
             <img src="${coverUrl}" 
-                 alt="Cover of ${escapeHtml(review.title)}" 
-                 class="book-cover" 
-                 loading="lazy"
-                 onerror="console.log('Image error for:', '${escapeHtml(review.title)}'); handleImageError(this, '${escapeHtml(review.title)}')">
+     alt="Book cover for ${escapeHtml(review.title)}" 
+     class="book-cover"
+     loading="lazy"
+     onerror="
+         console.log('Image failed to load:', this.src); 
+         this.src='https://via.placeholder.com/60x80/8B4B6B/white?text=${encodeURIComponent(review.title.substring(0,10))}';
+         this.style.display='block';
+     ">
             <div class="book-info">
               <h4 class="book-title">${escapeHtml(review.title)}</h4>
               <p class="book-author">by ${escapeHtml(review.author)}</p>
@@ -193,6 +197,7 @@ export function showStats() {
         statsBox.style.transform = 'translateY(0)';
     }
 }
+
 
 
 

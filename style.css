@@ -607,6 +607,8 @@ body {
     display: block !important; /* Force display even on error */
     background-color: #f0f0f0; /* Show background while loading */
     border: 1px solid #ddd; /* Visual placeholder */
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 .book-info {
@@ -876,3 +878,4 @@ img,
     overflow-wrap: break-word;
 
 }
+

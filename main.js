@@ -1,4 +1,5 @@
 // main.js - Application initialization and coordination
+console.log('🚀 MAIN.JS LOADING - VERSION 4');
 
 import { ResponsiveUtils, setupLazyLoading, handleImageError } from './utils.js';
 import { startPolling, setData } from './data.js';
@@ -126,6 +127,7 @@ if (document.readyState === 'loading') {
 // Export for potential external access
 
 export { initializeApp, onDataUpdate, currentData };
+
 
 
 

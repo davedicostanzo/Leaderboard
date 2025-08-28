@@ -25,10 +25,10 @@ let currentData = { participants: [], reviews: [] };
  * Handle data updates from polling
  */
 function onDataUpdate(data) {
-    console.log('=== ON DATA UPDATE ===');
-    console.log('Data received:', data);
-    console.log('Participants:', data.participants?.length || 0);
-    console.log('Reviews:', data.reviews?.length || 0);
+    console.log('=== DATA UPDATE ===');
+    console.log('Participants:', data.participants.length);
+    console.log('Reviews:', data.reviews.length);
+    console.log('Sample review:', data.reviews[0]);
     
     currentData = data;
     setData(data.participants, data.reviews);
@@ -36,9 +36,9 @@ function onDataUpdate(data) {
     // Re-render UI
     renderLeaderboard(data.participants, onLeaderboardRender);
     
-    // ALWAYS call renderReviews, even if no reviews
-    console.log('About to call renderReviews with:', data.reviews);
-    renderReviews(data.reviews || []);
+    // FIXED: Always pass the reviews array, even if empty
+    console.log('Calling renderReviews with:', data.reviews);
+    renderReviews(data.reviews); // Don't use conditional or fallback here
 }
 // Add this line for debugging
 window.debugOnDataUpdate = onDataUpdate;
@@ -127,6 +127,7 @@ if (document.readyState === 'loading') {
 // Export for potential external access
 
 export { initializeApp, onDataUpdate, currentData };
+
 
 
 

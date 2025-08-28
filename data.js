@@ -1,4 +1,5 @@
 // data.js - Data management and API interactions
+import { renderReviews } from './ui.js';
 
 // Configuration
 export const CONFIG = {
@@ -245,14 +246,19 @@ export function parseCSVToLeaderboard(csvText) {
 }
     }
 
-    console.log('=== FINAL PARSING RESULTS ===');
-    console.log('Participants created:', Object.keys(participants).length);
-    console.log('Reviews created:', reviews.length);
+console.log('=== FINAL PARSING RESULTS ===');
+console.log('Total participants:', Object.values(participants).length);
+console.log('Total reviews:', reviews.length);
+console.log('Reviews data:', reviews);
 
-    return {
-        participants: Object.values(participants),
-        reviews: reviews
-    };
+// DIRECT FIX: Call renderReviews directly here
+console.log('=== CALLING renderReviews DIRECTLY ===');
+renderReviews(reviews);
+
+return {
+    participants: Object.values(participants),
+    reviews: reviews
+};
 }
 
 export async function fetchLatestData() {
@@ -366,6 +372,7 @@ export function setData(participants, reviews) {
 export function getData() {
     return { participants: allData, reviews: reviewsData };
 }
+
 
 
 

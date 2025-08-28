@@ -82,6 +82,8 @@ function getReviewCoverUrl(review) {
  * Render the reviews section
  */
 // export function renderReviews(reviews = sampleReviewsData) { // Default to sample data commented out
+// Replace the entire renderReviews function in ui.js with this:
+
 export function renderReviews(reviews) {
     const sidebarColumn = document.querySelector('.sidebar-column .s-lib-box-content');
     
@@ -95,29 +97,16 @@ export function renderReviews(reviews) {
     const reviewsHTML = `
       <h3 class="reviews-header">Reviews!</h3>
       ${reviews.map((review, index) => {
-        console.log(`Rendering review ${index}:`, review.title, 'coverURL:', review.coverURL, 'isbn:', review.isbn);
-
-        // Determine cover URL
-        let coverUrl = '';
-       
-
-        // Always use real cover URL logic (avoid fallback)
-        coverUrl = getReviewCoverUrl(review);
-
+        // Use EXACTLY the same logic as carousel.js line 21-22
+        const coverUrl = review.coverURL || `https://covers.openlibrary.org/b/olid/${review.olid}-M.jpg`;
+        
         return `
           <article class="book-item">
-            ${coverUrl ? `
-              <img src="${coverUrl}" 
-                   alt="Book cover for ${escapeHtml(review.title)}" 
-                   class="book-cover"
-                   loading="lazy"
-                   onerror="this.style.display='none'">
-            ` : `
-              <div class="book-cover-placeholder" 
-                   style="width: 50px; height: 70px; background: #f5f5f5; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #999; margin-right: 8px; flex-shrink: 0;">
-                No Cover
-              </div>
-            `}
+            <img src="${coverUrl}" 
+                 alt="Cover of ${escapeHtml(review.title)}" 
+                 class="book-cover" 
+                 loading="lazy"
+                 onerror="handleImageError(this, '${escapeHtml(review.title)}')">
             <div class="book-info">
               <h4 class="book-title">${escapeHtml(review.title)}</h4>
               <p class="book-author">by ${escapeHtml(review.author)}</p>
@@ -130,6 +119,8 @@ export function renderReviews(reviews) {
 
     sidebarColumn.innerHTML = reviewsHTML;
 }
+
+// Remove the getReviewCoverUrl function entirely - we don't need it anymore!
 
 /**
  * Update statistics display
@@ -190,5 +181,6 @@ export function showStats() {
         statsBox.style.transform = 'translateY(0)';
     }
 }
+
 
 

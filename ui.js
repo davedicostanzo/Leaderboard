@@ -86,15 +86,27 @@ function getReviewCoverUrl(review) {
 
 // Replace your entire renderReviews function with this simple test version:
 
-export function renderReviews(reviews = sampleReviewsData) {
+export function renderReviews(reviews) {
     console.log('=== SIMPLE REVIEW TEST ===');
     console.log('Reviews received:', reviews);
-    console.log('Number of reviews:', reviews.length);
+    console.log('Number of reviews:', reviews ? reviews.length : 0);
+    
+    // Use sample data only if reviews is null/undefined, not if it's an empty array
+    const reviewsToRender = reviews || sampleReviewsData;
+    console.log('Using reviews:', reviewsToRender);
     
     const sidebarColumn = document.querySelector('.sidebar-column .s-lib-box-content');
     
     if (!sidebarColumn) {
         console.error('Sidebar not found');
+        return;
+    }
+
+    if (reviewsToRender.length === 0) {
+        sidebarColumn.innerHTML = `
+            <h3 class="reviews-header">Reviews!</h3>
+            <p>No reviews available yet.</p>
+        `;
         return;
     }
 
@@ -113,20 +125,18 @@ export function renderReviews(reviews = sampleReviewsData) {
                 <p class="book-description">This is a test to see if ANY image loads</p>
             </div>
         </article>
-        ${reviews.length > 0 ? `
         <article class="book-item">
-            <img src="${reviews[0].coverURL || 'MISSING'}" 
+            <img src="${reviewsToRender[0].coverURL || 'MISSING'}" 
                  alt="Real review cover" 
                  class="book-cover"
                  onload="console.log('✅ Real review image loaded:', this.src)"
                  onerror="console.log('❌ Real review image failed:', this.src)">
             <div class="book-info">
-                <h4 class="book-title">${escapeHtml(reviews[0].title || 'No title')}</h4>
-                <p class="book-author">${escapeHtml(reviews[0].author || 'No author')}</p>
-                <p class="book-description">${escapeHtml(reviews[0].description || 'No description')}</p>
+                <h4 class="book-title">${escapeHtml(reviewsToRender[0].title || 'No title')}</h4>
+                <p class="book-author">${escapeHtml(reviewsToRender[0].author || 'No author')}</p>
+                <p class="book-description">${escapeHtml(reviewsToRender[0].description || 'No description')}</p>
             </div>
         </article>
-        ` : '<p>No reviews found</p>'}
     `;
     
     console.log('Setting HTML...');
@@ -194,6 +204,7 @@ export function showStats() {
         statsBox.style.transform = 'translateY(0)';
     }
 }
+
 
 
 

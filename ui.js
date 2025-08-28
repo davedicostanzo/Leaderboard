@@ -84,56 +84,53 @@ function getReviewCoverUrl(review) {
 // export function renderReviews(reviews = sampleReviewsData) { // Default to sample data commented out
 // Replace the entire renderReviews function in ui.js with this:
 
-export function renderReviews(reviews) {
+// Replace your entire renderReviews function with this simple test version:
+
+export function renderReviews(reviews = sampleReviewsData) {
+    console.log('=== SIMPLE REVIEW TEST ===');
+    console.log('Reviews received:', reviews);
+    console.log('Number of reviews:', reviews.length);
+    
     const sidebarColumn = document.querySelector('.sidebar-column .s-lib-box-content');
     
     if (!sidebarColumn) {
-        console.error('Reviews container not found');
+        console.error('Sidebar not found');
         return;
     }
 
-    console.log('=== RENDERING REVIEWS ===');
-    console.log('Reviews array:', reviews);
-    
-    if (!reviews || reviews.length === 0) {
-        console.log('No reviews to display');
-        sidebarColumn.innerHTML = '<h3 class="reviews-header">Reviews!</h3><p>No reviews yet.</p>';
-        return;
-    }
-
-    const reviewsHTML = `
-      <h3 class="reviews-header">Reviews!</h3>
-      ${reviews.map((review, index) => {
-        console.log(`Rendering review ${index}:`, review);
-        
-        // EXACTLY the same as carousel
-        const coverUrl = review.coverURL || `https://covers.openlibrary.org/b/olid/${review.olid}-M.jpg`;
-        console.log(`Cover URL for "${review.title}":`, coverUrl);
-        
-        return `
-          <article class="book-item">
-            <img src="${coverUrl}" 
-     alt="Book cover for ${escapeHtml(review.title)}" 
-     class="book-cover"
-     loading="lazy"
-     onerror="
-         console.log('Image failed to load:', this.src); 
-         this.src='https://via.placeholder.com/60x80/8B4B6B/white?text=${encodeURIComponent(review.title.substring(0,10))}';
-         this.style.display='block';
-     ">
+    // Test with a known working image first
+    const testHTML = `
+        <h3 class="reviews-header">Reviews!</h3>
+        <article class="book-item">
+            <img src="https://covers.openlibrary.org/b/id/798170-M.jpg" 
+                 alt="Test cover" 
+                 class="book-cover"
+                 onload="console.log('✅ Test image loaded successfully')"
+                 onerror="console.log('❌ Test image failed')">
             <div class="book-info">
-              <h4 class="book-title">${escapeHtml(review.title)}</h4>
-              <p class="book-author">by ${escapeHtml(review.author)}</p>
-              <p class="book-description">${escapeHtml(review.description)}</p>
+                <h4 class="book-title">Test Book</h4>
+                <p class="book-author">Test Author</p>
+                <p class="book-description">This is a test to see if ANY image loads</p>
             </div>
-          </article>
-        `;
-      }).join('')}
+        </article>
+        ${reviews.length > 0 ? `
+        <article class="book-item">
+            <img src="${reviews[0].coverURL || 'MISSING'}" 
+                 alt="Real review cover" 
+                 class="book-cover"
+                 onload="console.log('✅ Real review image loaded:', this.src)"
+                 onerror="console.log('❌ Real review image failed:', this.src)">
+            <div class="book-info">
+                <h4 class="book-title">${escapeHtml(reviews[0].title || 'No title')}</h4>
+                <p class="book-author">${escapeHtml(reviews[0].author || 'No author')}</p>
+                <p class="book-description">${escapeHtml(reviews[0].description || 'No description')}</p>
+            </div>
+        </article>
+        ` : '<p>No reviews found</p>'}
     `;
-
-    sidebarColumn.innerHTML = reviewsHTML;
     
-    console.log('Reviews HTML generated');
+    console.log('Setting HTML...');
+    sidebarColumn.innerHTML = testHTML;
 }
 
 // Remove the getReviewCoverUrl function entirely - we don't need it anymore!
@@ -197,6 +194,7 @@ export function showStats() {
         statsBox.style.transform = 'translateY(0)';
     }
 }
+
 
 
 

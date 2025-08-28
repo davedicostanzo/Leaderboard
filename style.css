@@ -604,6 +604,9 @@ body {
     border-radius: 2px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     flex-shrink: 0;
+    display: block !important; /* Force display even on error */
+    background-color: #f0f0f0; /* Show background while loading */
+    border: 1px solid #ddd; /* Visual placeholder */
 }
 
 .book-info {
@@ -871,4 +874,5 @@ img,
     max-width: 100%;
     box-sizing: border-box;
     overflow-wrap: break-word;
+
 }

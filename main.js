@@ -39,7 +39,8 @@ function onDataUpdate(data) {
     console.log('About to call renderReviews with:', data.reviews);
     renderReviews(data.reviews || []);
 }
-
+// Add this line for debugging
+window.debugOnDataUpdate = onDataUpdate;
 /**
  * Handle leaderboard render completion
  */
@@ -125,5 +126,6 @@ if (document.readyState === 'loading') {
 // Export for potential external access
 
 export { initializeApp, onDataUpdate, currentData };
+
 
 

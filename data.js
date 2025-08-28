@@ -223,16 +223,26 @@ export function parseCSVToLeaderboard(csvText) {
             catalogURL: catalogURL && catalogURL.startsWith('http') ? catalogURL : null
         });
 
-        if (stars >= 4 && reviewText && reviewText.trim()) {
-            reviews.push({
-                title: bookTitle,
-                author: author,
-                olid: bookOLID,
-                isbn: extractISBNFromCoverURL(rawCoverURL),
-                description: `${reviewText.trim()} - ${stars} Stars from ${name}`,
-                coverURL: finalCoverURL
-            });
-        }
+ if (stars >= 4 && reviewText && reviewText.trim()) {
+    console.log('=== CREATING REVIEW ===');
+    console.log('Book title:', bookTitle);
+    console.log('Raw cover URL from sheet:', rawCoverURL);
+    console.log('Final cover URL being used:', finalCoverURL);
+    console.log('OLID extracted:', bookOLID);
+    console.log('Review text:', reviewText.trim());
+    
+    const reviewData = {
+        title: bookTitle,
+        author: author,
+        olid: bookOLID,
+        isbn: extractISBNFromCoverURL(rawCoverURL),
+        description: `${reviewText.trim()} - ${stars} Stars from ${name}`,
+        coverURL: finalCoverURL
+    };
+    
+    console.log('Final review object:', reviewData);
+    reviews.push(reviewData);
+}
     }
 
     console.log('=== FINAL PARSING RESULTS ===');
@@ -356,4 +366,5 @@ export function setData(participants, reviews) {
 export function getData() {
     return { participants: allData, reviews: reviewsData };
 }
+
 
